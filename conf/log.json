@@ -1,0 +1,20 @@
+{
+  "LogLevel" : "debug",
+
+  "FileWriter" : {
+    "On" : true,
+
+    "LogPath" : "./log/server.log.info",
+    "RotateLogPath" : "./log/server.log.info.%Y%M%D%H",
+
+    "WfLogPath" : "./log/server.log.wf",
+    "RotateWfLogPath" : "./log/server.log.wf.%Y%M%D%H",
+
+    "PublicLogPath" : "./log/public.log",
+    "RotatePublicLogPath" : "./log/public.log.%Y%M%D%H"
+  },
+
+  "ConsoleWriter" : {
+    "On" : false
+  }
+}

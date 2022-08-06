@@ -1,0 +1,4 @@
+2022/08/07 00:36:57 [INFO] <main.go:57> init log done!
+2022/08/07 00:42:41 [INFO] <main.go:58> init log done!
+2022/08/07 00:42:41 [INFO] <main.go:74> service start success, port=8888
+2022/08/07 00:42:41 [DEBUG] <main.go:78> waiting for client connect...

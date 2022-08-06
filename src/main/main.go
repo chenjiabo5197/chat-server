@@ -1,13 +1,19 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	logger "github.com/shengkehua/xlog4go"
 	"io"
 	"model"
 	"net"
 	"process"
 	"rpc"
 	"time"
+)
+
+var (
+	logFile = flag.String("l", "./conf/log.json", "log config file path")
 )
 
 /*
@@ -28,7 +34,7 @@ func process(conn net.Conn) {
 			//fmt.Println("客户端下线")
 			return
 		}
-		fmt.Println("客户端和服务器通信协程出错,err=", err)
+		logger.Error("client communicate with service err, err=%s", err.Error())
 		return
 	}
 }
@@ -45,6 +51,12 @@ func initUserDao() {
 
 func main() {
 
+	// init log
+	if err := initLog(*logFile); err != nil {
+		panic(err)
+	}
+	logger.Info("init log done!")
+
 	//服务器启动时，初始化一个redis连接池
 	rpc.InitPool("127.0.0.1:6379", 16, 0, 300*time.Second)
 
@@ -56,17 +68,17 @@ func main() {
 	defer listen.Close()
 
 	if err != nil {
-		fmt.Println("服务器监听出错,err=", err)
+		logger.Error("server listen err, err=%s", err.Error())
 		return
 	}
-	fmt.Println("服务器在8888端口监听...")
+	logger.Info("service start success, port=8888")
 
 	//监听成功，等待客户端来连接服务器
 	for {
-		fmt.Println("等待客户端来连接")
+		logger.Debug("waiting for client connect...")
 		conn, err := listen.Accept()
 		if err != nil {
-			fmt.Println("客户端连接出错,err=", err)
+			logger.Error("client connect err, err=%s", err.Error())
 			//此处不用return，万一只是一条连接出错，不能将整个服务器退出
 			// return
 		}
@@ -75,4 +87,13 @@ func main() {
 		go process(conn)
 	}
 
+}
+
+func initLog(path string) (err error) {
+	err = logger.SetupLogWithConf(path)
+	if err != nil {
+		fmt.Printf("log init fail, err=%s\n", err.Error())
+		return
+	}
+	return nil
 }
