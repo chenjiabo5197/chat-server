@@ -21,17 +21,17 @@ type UserMgr struct {
 //完成对userMgr的初始化工作
 func init() {
 	Usermgr = &UserMgr{
-		OnlineUsers : make(map[int]*UserProcess, 0),
+		OnlineUsers: make(map[int]*UserProcess, 0),
 	}
 }
 
 //完成对onlineUsers的添加
-func (um *UserMgr) AddOnlineUsers (up *UserProcess) {
+func (um *UserMgr) AddOnlineUsers(up *UserProcess) {
 	um.OnlineUsers[up.UserId] = up
 }
 
 // 完成对onlineUsers的删除
-func (um *UserMgr) DeleteOnlineUsers (userId int) {
+func (um *UserMgr) DeleteOnlineUsers(userId int) {
 	delete(um.OnlineUsers, userId)
 }
 
@@ -41,7 +41,7 @@ func (um *UserMgr) GetAllOnlineUsers() map[int]*UserProcess {
 }
 
 // 根据传入的UserId返回当前的在线用户的UserProcess指针
-func (um *UserMgr) GetUserProcessById (userId int) (up *UserProcess, err error) {
+func (um *UserMgr) GetUserProcessById(userId int) (up *UserProcess, err error) {
 	up, ok := um.OnlineUsers[userId]
 
 	if !ok {

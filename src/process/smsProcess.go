@@ -1,33 +1,32 @@
 package processes
 
 import (
+	"common"
 	"encoding/json"
 	"fmt"
 	"net"
-	"vs_code/project0007/common"
-	"vs_code/project0007/service/utils"
+	"utils"
 )
 
 type SmsProcessor struct {
-
 }
 
 /*
 	向所有在线的用户发送消息
- */
-func (sp *SmsProcessor) SendMesToAllUsers (mes *common.Message) (err error) {
+*/
+func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 
 	//将受到的消息反序列化
 	var smsMes common.SmsMes
 	err = json.Unmarshal([]byte(mes.Data), &smsMes)
 	if err != nil {
-		fmt.Println("smsMes反序列化失败,err=",err)
+		fmt.Println("smsMes反序列化失败,err=", err)
 		return
 	}
 	//fmt.Println("smsMes=",smsMes)
 	/*
 		必须序列化整个smsMes结构体，因为要发送一个消息实例，而不是一个string
-	 */
+	*/
 	//data, err := json.Marshal(smsMes.Content)
 	//data, err := json.Marshal(smsMes)
 
@@ -61,13 +60,12 @@ func (sp *SmsProcessor) SendMesToAllUsers (mes *common.Message) (err error) {
 	return
 }
 
-
 /*
 	向所有在线的用户发送消息
 */
-func (sp *SmsProcessor) SendMesToUser (data []byte, conn net.Conn) (err error) {
+func (sp *SmsProcessor) SendMesToUser(data []byte, conn net.Conn) (err error) {
 	tf := &utils.Transfer{
-		Conn:conn,
+		Conn: conn,
 	}
 
 	err = tf.WritePkg(data)
