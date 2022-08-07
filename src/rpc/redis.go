@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//定义一个全局的pool,传给UserDao实例对象
+// Pool 定义一个全局的pool,传给UserDao实例对象
 var Pool *redis.Pool
 
 func InitPool(address string, maxIdle int, maxActive int, idleTimeout time.Duration) {

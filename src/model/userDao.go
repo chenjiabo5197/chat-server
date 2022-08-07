@@ -3,8 +3,9 @@ package model
 import (
 	"common"
 	"encoding/json"
-	"fmt"
 	"github.com/garyburd/redigo/redis"
+	logger "github.com/shengkehua/xlog4go"
+	"utils"
 )
 
 /*
@@ -50,7 +51,7 @@ func (up *UserDao) getUserById(conn redis.Conn, userId int) (user *common.User, 
 	err = json.Unmarshal([]byte(res), &user)
 
 	if err != nil {
-		fmt.Println("json反序列化redis数据出错,err=", err)
+		logger.Error("redis data unmarshal err, err=%s", err.Error())
 		return
 	}
 	return
@@ -96,7 +97,7 @@ func (up *UserDao) RegisterUser(user common.User) (err error) {
 	//	fmt.Println("userString反序列化失败")
 	//	return
 	//}
-	fmt.Println("user=", user)
+	logger.Debug("user=%s", utils.Struct2String(user))
 
 	_, err = up.getUserById(conn, user.UserId)
 
@@ -109,7 +110,7 @@ func (up *UserDao) RegisterUser(user common.User) (err error) {
 	data, err := json.Marshal(user)
 	_, err = conn.Do("HSet", "users", user.UserId, string(data))
 	if err != nil {
-		fmt.Println("保存注册用户信息错误,err=", err)
+		logger.Error("save rigister mes err, err=%s", err.Error())
 		return
 	}
 

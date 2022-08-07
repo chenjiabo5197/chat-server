@@ -3,7 +3,7 @@ package processes
 import (
 	"common"
 	"encoding/json"
-	"fmt"
+	logger "github.com/shengkehua/xlog4go"
 	"net"
 	"utils"
 )
@@ -11,16 +11,14 @@ import (
 type SmsProcessor struct {
 }
 
-/*
-	向所有在线的用户发送消息
-*/
+// SendMesToAllUsers 向所有在线的用户发送消息
 func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 
 	//将受到的消息反序列化
 	var smsMes common.SmsMes
 	err = json.Unmarshal([]byte(mes.Data), &smsMes)
 	if err != nil {
-		fmt.Println("smsMes反序列化失败,err=", err)
+		logger.Error("smsMes unmarshal err, err=%s", err.Error())
 		return
 	}
 	//fmt.Println("smsMes=",smsMes)
@@ -31,22 +29,22 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 	//data, err := json.Marshal(smsMes)
 
 	//组装服务器转发聊天消息实例
-	smsResMes := common.SmsResMes{
+	smsRespMes := common.SmsRespMes{
 		User:    smsMes.User,
 		Content: smsMes.Content,
 	}
-	data, err := json.Marshal(smsResMes)
+	data, err := json.Marshal(smsRespMes)
 	if err != nil {
-		fmt.Println("smsResMes序列化失败")
+		logger.Error("smsRespMes marshal err, err=%s", err.Error())
 		return
 	}
-	mesRes := common.Message{
-		Type: common.SmsResMesType,
+	mesResp := common.Message{
+		Type: common.SmsRespMesType,
 		Data: string(data),
 	}
-	data, err = json.Marshal(mesRes)
+	data, err = json.Marshal(mesResp)
 	if err != nil {
-		fmt.Println("mesRes序列化失败")
+		logger.Error("mesResp marshal err, err=%s", err.Error())
 		return
 	}
 
@@ -70,7 +68,7 @@ func (sp *SmsProcessor) SendMesToUser(data []byte, conn net.Conn) (err error) {
 
 	err = tf.WritePkg(data)
 	if err != nil {
-		fmt.Println("服务器转发消息失败")
+		logger.Error("service transfer mes err, err=%s", err.Error())
 		return
 	}
 	return

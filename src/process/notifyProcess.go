@@ -3,7 +3,7 @@ package processes
 import (
 	"common"
 	"encoding/json"
-	"fmt"
+	logger "github.com/shengkehua/xlog4go"
 	"net"
 	"utils"
 )
@@ -14,9 +14,7 @@ import (
 type NotifyProcessor struct {
 }
 
-/*
-	通知其他用户当前用户上线/下线的消息
-*/
+// NotifyOthersOnlineUser 通知其他用户当前用户上线/下线的消息
 func (np *NotifyProcessor) NotifyOthersOnlineUser(userId int, status int) (err error) {
 
 	//实例化一个NotifyUserStatusMes对象，用于向客户端通知
@@ -28,13 +26,13 @@ func (np *NotifyProcessor) NotifyOthersOnlineUser(userId int, status int) (err e
 	case 1:
 		notifyMes.UserStatus = common.UserOffline
 	default:
-		fmt.Println("错误类型")
+		logger.Error("unknown type")
 		return
 	}
 
 	data, err := json.Marshal(notifyMes)
 	if err != nil {
-		fmt.Println("notifyMes序列化失败,err=", err)
+		logger.Error("notifyMes marshal err, err=%s", err.Error())
 		return
 	}
 
@@ -45,7 +43,7 @@ func (np *NotifyProcessor) NotifyOthersOnlineUser(userId int, status int) (err e
 
 	data, err = json.Marshal(mes)
 	if err != nil {
-		fmt.Println("mes反序列化失败,err=", err)
+		logger.Error("mes marshal err, err=%s", err.Error())
 		return
 	}
 
@@ -81,7 +79,7 @@ func (np *NotifyProcessor) NotifyOnlineUser(data []byte, conn net.Conn) (err err
 
 	err = tf.WritePkg(data)
 	if err != nil {
-		fmt.Println("服务器转发消息失败")
+		logger.Error("service transfer mes err, err=%s", err.Error())
 		return
 	}
 	return

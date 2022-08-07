@@ -2,13 +2,13 @@ package processes
 
 import (
 	"common"
-	"fmt"
+	logger "github.com/shengkehua/xlog4go"
 	"io"
 	"net"
 	"utils"
 )
 
-//创建一个Process的结构体
+// Processor 创建一个Process的结构体
 type Processor struct {
 	Conn  net.Conn
 	CurId int //保存此进程中和服务器连接的客户id，用于客户端下线后删除该客户端
@@ -48,7 +48,7 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 		return
 	default:
 		//错误
-		fmt.Println("错误的消息类型")
+		logger.Error("unknown mes type")
 		return
 	}
 }
@@ -64,21 +64,21 @@ func (p *Processor) Process2() (err error) {
 		mes, err := tf.ReadPkg()
 		if err != nil {
 			if err == io.EOF {
-				fmt.Println("客户端关闭了连接")
+				logger.Info("client close connect")
 				//客户端关闭连接，在在线用户列表中将其删除,再通知客户端在其本地维护的onlineUserMap中删除该用户
 				Usermgr.DeleteOnlineUsers(p.CurId)
 				np := NotifyProcessor{}
 				err = np.NotifyOthersOnlineUser(p.CurId, 1)
-				fmt.Println("在线用户OnlineUsers=", Usermgr.OnlineUsers)
+				logger.Info("online user list=%s", utils.Struct2String(Usermgr.OnlineUsers))
 				return err
 			} else {
-				fmt.Println("读取客户端消失失败,err=", err)
+				logger.Error("read client list err, err=%s", err.Error())
 			}
 		}
 		// fmt.Println("mes=",mes)
 		err = p.ServerProcessMes(&mes)
 		if err != nil {
-			fmt.Println("err=", err)
+			logger.Error("handler err, err=%s", err.Error())
 			return err
 		}
 	}

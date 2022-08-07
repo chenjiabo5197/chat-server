@@ -3,21 +3,19 @@ package processes
 import (
 	"common"
 	"encoding/json"
-	"fmt"
+	logger "github.com/shengkehua/xlog4go"
 	"model"
 	"net"
 	"utils"
 )
 
-//用于处理用户的结构体(用户登录和注册)
+// UserProcess 用于处理用户的结构体(用户登录和注册)
 type UserProcess struct {
 	Conn   net.Conn
 	UserId int //后添加参数，用于表明该Conn是哪位用户的连接
 }
 
-/*
-	通知其他用户当前用户上线/下线的消息
-*/
+// NotifyOthersOnlineUser 通知其他用户当前用户上线/下线的消息
 func (up *UserProcess) NotifyOthersOnlineUser(userId int) (err error) {
 	//实例一个返回消息对象
 	var notifyMes common.NotifyUserStatusMes
@@ -26,7 +24,7 @@ func (up *UserProcess) NotifyOthersOnlineUser(userId int) (err error) {
 
 	data, err := json.Marshal(notifyMes)
 	if err != nil {
-		fmt.Println("notifyMes序列化失败,err=", err)
+		logger.Error("notifyMes marshal err, err=%s", err.Error())
 		return
 	}
 
@@ -37,7 +35,7 @@ func (up *UserProcess) NotifyOthersOnlineUser(userId int) (err error) {
 
 	data, err = json.Marshal(mes)
 	if err != nil {
-		fmt.Println("mes反序列化失败,err=", err)
+		logger.Error("mes marshal err, err=%s", err.Error())
 		return
 	}
 	//遍历onlineUsers 这个map，向其中的user通知上线信息
@@ -63,7 +61,7 @@ func (up *UserProcess) NotifyOnlineUser(data []byte, conn net.Conn) (err error) 
 
 	err = tf.WritePkg(data)
 	if err != nil {
-		fmt.Println("err=", err)
+		logger.Error("notifyOnlineUser err, err=%s", err.Error())
 	}
 	return
 }
@@ -76,11 +74,11 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId int, err 
 	var loginMes common.LoginMes
 	err = json.Unmarshal([]byte(mes.Data), &loginMes)
 	if err != nil {
-		fmt.Println("将LoginMes反序列化失败,err=", err)
+		logger.Error("loginMes unmarshal err, err=%s", err.Error())
 		return
 	}
 	//定义一个LoginResMes结构体
-	var loginResMes common.LoginResMes
+	var loginRespMes common.LoginRespMes
 
 	//判断输入的用户名和密码是否符合规定
 	// if loginMes.UserId == 100 && loginMes.UserPwd == "abc" {
@@ -97,48 +95,50 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId int, err 
 		//loginResMes.ResCode = 500
 		//loginResMes.Error = "该用户不存在"
 		if err == model.ERROR_USER_NOTEXISTS {
-			loginResMes.ResCode = 500
-			loginResMes.Error = err.Error()
+			loginRespMes.RespCode = 500
+			loginRespMes.Error = err.Error()
 		} else if err == model.ERROR_USER_PWD {
-			loginResMes.ResCode = 403
-			loginResMes.Error = err.Error()
+			loginRespMes.RespCode = 403
+			loginRespMes.Error = err.Error()
 		} else {
-			loginResMes.ResCode = 505
-			loginResMes.Error = "服务器内部错误"
+			loginRespMes.RespCode = 505
+			loginRespMes.Error = "服务器内部错误"
 		}
 	} else {
 		/*
 			用户登录成功先将用户加入到在线用户列表中,然后返回在线用户列表
 		*/
-		loginResMes.ResCode = 200
+		loginRespMes.RespCode = 200
 		Usermgr.OnlineUsers[loginMes.UserId] = up
 		//通知其他用户有新用户上线
 		np := NotifyProcessor{}
 		err = np.NotifyOthersOnlineUser(loginMes.UserId, 0)
 		for k := range Usermgr.OnlineUsers {
-			loginResMes.UsersId = append(loginResMes.UsersId, k)
+			loginRespMes.UsersId = append(loginRespMes.UsersId, k)
 		}
-		fmt.Println(user, "登陆成功")
+		logger.Info("%s登陆成功", utils.Struct2String(user))
 	}
 
 	//将LoginResMes反序列化
-	data, err := json.Marshal(loginResMes)
+	data, err := json.Marshal(loginRespMes)
 	if err != nil {
-		fmt.Println("loginResMes结构体反序列化失败")
+		logger.Error("LoginRespMes marshal err, err=%s", err.Error())
 		return
 	}
 
 	//定义一个Message结构体，用于发送给客户端
 	var resMes common.Message
-	resMes.Type = common.LoginResMesType
+	resMes.Type = common.LoginRespMesType
 	resMes.Data = string(data)
 
 	//将Message结构体序列化
 	data, err = json.Marshal(resMes)
 	if err != nil {
-		fmt.Println("Message序列化出错,err=", err)
+		logger.Error("Message marshal err, err=%s", err.Error())
 		return
 	}
+
+	logger.Info("send to client login resp data=%s", data)
 
 	//将Message序列化的结果发送给客户端
 	//mvc模式，所以必须先创建一个Transfer实例，然后读取
@@ -159,47 +159,48 @@ func (up *UserProcess) ServerProcessRigister(mes *common.Message) (err error) {
 	err = json.Unmarshal([]byte(mes.Data), &rigisterMes)
 
 	if err != nil {
-		fmt.Println("将LoginMes反序列化失败,err=", err)
+		logger.Error("RigisterMes unmarshal err, err=%s", err.Error())
 		return
 	}
-	fmt.Println("rigisterMes=", rigisterMes)
+	logger.Info("RigisterMes=%s", utils.Struct2String(rigisterMes))
 	//定义一个RigisterResMes结构体
-	var rigisterResMes common.RegisterResMes
+	var rigisterRespMes common.RegisterRespMes
 
 	//拿UserDao对象的方法去redis验证
 	err = model.MyUserDao.RegisterUser(rigisterMes.User)
 
 	if err != nil {
 		if err == model.ERROR_USER_EXISTS {
-			rigisterResMes.ResCode = 500
-			rigisterResMes.Error = err.Error()
+			rigisterRespMes.RespCode = 500
+			rigisterRespMes.Error = err.Error()
 		} else {
-			rigisterResMes.ResCode = 505
-			rigisterResMes.Error = "服务器内部错误"
+			rigisterRespMes.RespCode = 505
+			rigisterRespMes.Error = "服务器内部错误"
 		}
 	} else {
-		rigisterResMes.ResCode = 200
-		fmt.Println("注册成功")
+		rigisterRespMes.RespCode = 200
+		logger.Info("rigister success")
 	}
 
-	//将LoginResMes反序列化
-	data, err := json.Marshal(rigisterResMes)
+	//将rigisterResMes反序列化
+	data, err := json.Marshal(rigisterRespMes)
 	if err != nil {
-		fmt.Println("rigisterResMes结构体反序列化失败")
+		logger.Error("rigisterRespMes marshal err, err=%s", err.Error())
 		return
 	}
 
 	//定义一个Message结构体，用于发送给客户端
 	var resMes common.Message
-	resMes.Type = common.RegisterResMesType
+	resMes.Type = common.RegisterRespMesType
 	resMes.Data = string(data)
 
 	//将Message结构体序列化
 	data, err = json.Marshal(resMes)
 	if err != nil {
-		fmt.Println("Message序列化出错,err=", err)
+		logger.Info("resMes marshal err, err=%v", err.Error())
 		return
 	}
+	logger.Info("send to client rigister resp data=%s", data)
 
 	//将Message序列化的结果发送给客户端
 	//mvc模式，所以必须先创建一个Transfer实例，然后读取
