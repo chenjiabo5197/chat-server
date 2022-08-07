@@ -41,16 +41,21 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 		err = up.ServerProcessRigister(mes)
 		return
 	case common.SmsMesType:
-		//处理转发聊天消息
+		//处理转发广播消息
 		sp := SmsProcessor{}
 		err = sp.SendMesToAllUsers(mes)
 		return
 	case common.QueryAllOnlineType:
-		//处理转发聊天消息
+		//处理查询在线用户
 		qo := QueryOnline{
 			Conn: p.Conn,
 		}
 		qo.QueryAllOnlineUser(mes.Data)
+		return
+	case common.SmsToOneMesType:
+		//处理转发1对1聊天消息
+		sp := SmsProcessor{}
+		err = sp.SendMesToOne(mes.Data)
 		return
 	default:
 		//错误

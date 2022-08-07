@@ -104,3 +104,30 @@
 2022/08/07 19:43:59 [INFO] <transfer.go:32> client close connect, service also close connect
 2022/08/07 19:43:59 [INFO] <process.go:73> client close connect
 2022/08/07 19:43:59 [INFO] <process.go:81> online user list={}
+2022/08/07 23:37:12 [INFO] <main.go:58> init log done!
+2022/08/07 23:37:12 [INFO] <main.go:74> service start success, port=8888
+2022/08/07 23:37:12 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 23:37:21 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 23:37:21 [INFO] <userProcess.go:118> {"userid":100,"userpwd":"123456","username":"chen","userstatus":0}登陆成功
+2022/08/07 23:37:21 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":100,\"UserName\":\"chen\"}"}
+2022/08/07 23:37:26 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/07 23:37:26 [INFO] <process.go:78> client close connect
+2022/08/07 23:37:26 [INFO] <process.go:86> online user list={}
+2022/08/07 23:37:35 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 23:37:35 [INFO] <userProcess.go:118> {"userid":100,"userpwd":"123456","username":"chen","userstatus":0}登陆成功
+2022/08/07 23:37:35 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":100,\"UserName\":\"chen\"}"}
+2022/08/07 23:37:56 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 23:37:56 [INFO] <userProcess.go:118> {"userid":200,"userpwd":"123456","username":"jia","userstatus":0}登陆成功
+2022/08/07 23:37:56 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":200,\"UserName\":\"jia\"}"}
+2022/08/07 23:38:06 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 23:38:06 [INFO] <userProcess.go:118> {"userid":300,"userpwd":"123456","username":"bo","userstatus":0}登陆成功
+2022/08/07 23:38:06 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":300,\"UserName\":\"bo\"}"}
+2022/08/07 23:39:15 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/07 23:39:15 [INFO] <process.go:78> client close connect
+2022/08/07 23:39:15 [INFO] <process.go:86> online user list={"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 23:39:19 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/07 23:39:19 [INFO] <process.go:78> client close connect
+2022/08/07 23:39:19 [INFO] <process.go:86> online user list={"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 23:39:22 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/07 23:39:22 [INFO] <process.go:78> client close connect
+2022/08/07 23:39:22 [INFO] <process.go:86> online user list={}

@@ -58,7 +58,46 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 	return
 }
 
-// SendMesToUser 向所有在线的用户发送消息
+// SendMesToOne 向单个用户发送消息
+func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
+	//将收到的消息反序列化
+	var smsMes common.SmsMes
+	err = json.Unmarshal([]byte(smsStr), &smsMes)
+	if err != nil {
+		logger.Error("smsMes unmarshal err, err=%s", err.Error())
+		return
+	}
+
+	//组装服务器转发聊天消息实例
+	smsRespMes := common.SmsRespMes{
+		User:    smsMes.User,
+		Content: smsMes.Content,
+	}
+	data, err := json.Marshal(smsRespMes)
+	if err != nil {
+		logger.Error("smsRespMes marshal err, err=%s", err.Error())
+		return
+	}
+	mesResp := common.Message{
+		Type: common.SmsRespMesType,
+		Data: string(data),
+	}
+	data, err = json.Marshal(mesResp)
+	if err != nil {
+		logger.Error("mesResp marshal err, err=%s", err.Error())
+		return
+	}
+
+	//遍历所有在线的用户和其连接，找到要发送的对象
+	for _, up := range Usermgr.OnlineUsers {
+		if smsMes.Target == up.UserName {
+			err = sp.SendMesToUser(data, up.Conn)
+		}
+	}
+	return
+}
+
+// SendMesToUser 向用户发送消息
 func (sp *SmsProcessor) SendMesToUser(data []byte, conn net.Conn) (err error) {
 	tf := &utils.Transfer{
 		Conn: conn,

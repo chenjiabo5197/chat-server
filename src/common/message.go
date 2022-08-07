@@ -12,10 +12,12 @@ const (
 	RegisterMesType         MesType = "RegisterMes"
 	RegisterRespMesType     MesType = "RegisterRespMes"
 	NotifyUserStatusMesType MesType = "NotifyUserStatusMes"
-	SmsMesType              MesType = "SmsMes"
+	SmsMesType              MesType = "SmsMes" // 广播通信
 	SmsRespMesType          MesType = "SmsRespMes"
 	QueryAllOnlineType      MesType = "QueryAllOnline"
 	AllOnlineRespType       MesType = "AllOnlineResp"
+	SmsToOneMesType         MesType = "SmsToOneMes" // 1对1通信
+	SmsToOneRespMesType     MesType = "SmsToOneRespMes"
 )
 
 //定义几个用户在线状态
@@ -77,6 +79,7 @@ type NotifyUserStatusMes struct {
 type SmsMes struct {
 	User           //匿名结构体
 	Content string `json:"content"`
+	Target  string `json:"target"` // 消息发送的对象
 }
 
 // SmsRespMes 服务器转发聊天消息的结构体
