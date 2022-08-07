@@ -1,5 +1,9 @@
 package common
 
+/*
+	此包客户端和服务端功用一套
+*/
+
 type MesType string
 
 const (
@@ -10,6 +14,8 @@ const (
 	NotifyUserStatusMesType MesType = "NotifyUserStatusMes"
 	SmsMesType              MesType = "SmsMes"
 	SmsRespMesType          MesType = "SmsRespMes"
+	QueryAllOnlineType      MesType = "QueryAllOnline"
+	AllOnlineRespType       MesType = "AllOnlineResp"
 )
 
 //定义几个用户在线状态
@@ -24,27 +30,22 @@ type Message struct {
 	Data string  `json:"data"` //消息内容
 }
 
-/*
-	客户端发送的登录消息
-*/
+// LoginMes 客户端发送的登录消息
 type LoginMes struct {
 	UserId   int    `json:"userid"`
 	UserPwd  string `json:"userpwd"`
 	UserName string `json:"username"`
 }
 
-/*
-	服务器端返回的登录的结果消息
-*/
+// LoginRespMes 服务器端返回的登录的结果消息
 type LoginRespMes struct {
 	RespCode int    `json:"respcode"`
 	Error    string `json:"error"`
-	UsersId  []int
+	UsersId  int
+	UserName string
 }
 
-/*
-	客户端发送的注册消息
-*/
+// RegisterMes 客户端发送的注册消息
 type RegisterMes struct {
 	User User `json:"user"`
 }
@@ -59,34 +60,26 @@ type User struct {
 	UserStatus int    `json:"userstatus"`
 }
 
-/*
-	服务器端返回的注册的结果消息
-*/
+// RegisterRespMes 服务器端返回的注册的结果消息
 type RegisterRespMes struct {
 	RespCode int    `json:"respcode"`
 	Error    string `json:"error"`
 }
 
-/*
-	服务器用于推送用户状态变化的消息
-*/
+// NotifyUserStatusMes 服务器用于推送用户状态变化的消息
 type NotifyUserStatusMes struct {
 	UserId     int    `json:"userid"`
 	UserStatus int    `json:"userstatus"`
 	UserName   string `json:"username"`
 }
 
-/*
-	客户端发送聊天消息的结构体
-*/
+// SmsMes 客户端发送聊天消息的结构体
 type SmsMes struct {
 	User           //匿名结构体
 	Content string `json:"content"`
 }
 
-/*
-	服务器转发聊天消息的结构体
-*/
+// SmsRespMes 服务器转发聊天消息的结构体
 type SmsRespMes struct {
 	User           //匿名结构体
 	Content string `json:"content"`

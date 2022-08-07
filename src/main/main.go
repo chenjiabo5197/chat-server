@@ -27,7 +27,7 @@ func process(conn net.Conn) {
 		Conn: conn,
 	}
 
-	err := processor.Process2()
+	err := processor.HandlerRecvMes()
 
 	if err != nil {
 		if err == io.EOF {

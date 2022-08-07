@@ -1,0 +1,106 @@
+2022/08/07 19:28:23 [INFO] <main.go:58> init log done!
+2022/08/07 19:28:23 [INFO] <main.go:74> service start success, port=8888
+2022/08/07 19:28:23 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:29:01 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:29:01 [INFO] <userProcess.go:119> {"userid":100,"userpwd":"123456","username":"chen","userstatus":0}登陆成功
+2022/08/07 19:29:01 [INFO] <userProcess.go:141> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":100,\"UserName\":\"chen\"}"}
+2022/08/07 19:29:13 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:29:13 [INFO] <userProcess.go:119> {"userid":200,"userpwd":"123456","username":"jia","userstatus":0}登陆成功
+2022/08/07 19:29:13 [INFO] <userProcess.go:141> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":200,\"UserName\":\"jia\"}"}
+2022/08/07 19:29:23 [INFO] <queryOnline.go:40> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"jia"}
+2022/08/07 19:30:10 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:30:10 [INFO] <userProcess.go:163> RigisterMes={"user":{"userid":300,"userpwd":"123456","username":"bo","userstatus":0}}
+2022/08/07 19:30:10 [DEBUG] <userDao.go:100> user={"userid":300,"userpwd":"123456","username":"bo","userstatus":0}
+2022/08/07 19:30:10 [INFO] <userProcess.go:180> rigister success
+2022/08/07 19:30:10 [INFO] <userProcess.go:201> send to client rigister resp data={"type":"RegisterRespMes","data":"{\"respcode\":200,\"error\":\"\"}"}
+2022/08/07 19:30:10 [INFO] <transfer.go:34> client close connect, service also close connect
+2022/08/07 19:30:10 [INFO] <process.go:75> client close connect
+2022/08/07 19:30:10 [INFO] <process.go:83> online user list={}
+2022/08/07 19:30:16 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:30:16 [INFO] <userProcess.go:119> {"userid":300,"userpwd":"123456","username":"bo","userstatus":0}登陆成功
+2022/08/07 19:30:16 [INFO] <userProcess.go:141> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":300,\"UserName\":\"bo\"}"}
+2022/08/07 19:30:18 [INFO] <queryOnline.go:40> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"bo"}
+2022/08/07 19:31:14 [INFO] <queryOnline.go:40> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"bo"}
+2022/08/07 19:32:40 [INFO] <main.go:58> init log done!
+2022/08/07 19:32:40 [INFO] <main.go:74> service start success, port=8888
+2022/08/07 19:32:40 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:32:58 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:32:58 [INFO] <userProcess.go:119> {"userid":100,"userpwd":"123456","username":"chen","userstatus":0}登陆成功
+2022/08/07 19:32:58 [INFO] <userProcess.go:141> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":100,\"UserName\":\"chen\"}"}
+2022/08/07 19:33:06 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:33:06 [INFO] <userProcess.go:119> {"userid":200,"userpwd":"123456","username":"jia","userstatus":0}登陆成功
+2022/08/07 19:33:06 [INFO] <userProcess.go:141> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":200,\"UserName\":\"jia\"}"}
+2022/08/07 19:33:12 [DEBUG] <queryOnline.go:25> online User data={"0":{"Conn":{},"UserId":0,"UserName":"jia"}}
+2022/08/07 19:33:12 [INFO] <queryOnline.go:41> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"jia"}
+2022/08/07 19:34:56 [INFO] <main.go:58> init log done!
+2022/08/07 19:34:56 [INFO] <main.go:74> service start success, port=8888
+2022/08/07 19:34:56 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:35:14 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:35:14 [INFO] <userProcess.go:120> {"userid":200,"userpwd":"123456","username":"jia","userstatus":0}登陆成功
+2022/08/07 19:35:14 [INFO] <userProcess.go:142> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":200,\"UserName\":\"jia\"}"}
+2022/08/07 19:35:24 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:35:24 [INFO] <userProcess.go:120> {"userid":100,"userpwd":"123456","username":"chen","userstatus":0}登陆成功
+2022/08/07 19:35:24 [INFO] <userProcess.go:142> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":100,\"UserName\":\"chen\"}"}
+2022/08/07 19:35:29 [DEBUG] <queryOnline.go:25> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"},"200":{"Conn":{},"UserId":200,"UserName":"jia"}}
+2022/08/07 19:35:29 [INFO] <queryOnline.go:41> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"jia"}
+2022/08/07 19:36:15 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:36:15 [INFO] <userProcess.go:120> {"userid":300,"userpwd":"123456","username":"bo","userstatus":0}登陆成功
+2022/08/07 19:36:15 [INFO] <userProcess.go:142> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":300,\"UserName\":\"bo\"}"}
+2022/08/07 19:36:22 [DEBUG] <queryOnline.go:25> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"},"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:36:22 [INFO] <queryOnline.go:41> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"jiabo"}
+2022/08/07 19:38:45 [INFO] <main.go:58> init log done!
+2022/08/07 19:38:45 [INFO] <main.go:74> service start success, port=8888
+2022/08/07 19:38:45 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:39:05 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:39:05 [INFO] <userProcess.go:120> {"userid":100,"userpwd":"123456","username":"chen","userstatus":0}登陆成功
+2022/08/07 19:39:05 [INFO] <userProcess.go:142> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":100,\"UserName\":\"chen\"}"}
+2022/08/07 19:39:17 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:39:17 [INFO] <userProcess.go:120> {"userid":200,"userpwd":"123456","username":"jia","userstatus":0}登陆成功
+2022/08/07 19:39:17 [INFO] <userProcess.go:142> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":200,\"UserName\":\"jia\"}"}
+2022/08/07 19:39:25 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:39:25 [INFO] <userProcess.go:120> {"userid":300,"userpwd":"123456","username":"bo","userstatus":0}登陆成功
+2022/08/07 19:39:25 [INFO] <userProcess.go:142> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":300,\"UserName\":\"bo\"}"}
+2022/08/07 19:39:31 [DEBUG] <queryOnline.go:24> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"},"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:39:31 [INFO] <queryOnline.go:41> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[\"jia\",\"bo\"]"}
+2022/08/07 19:39:42 [DEBUG] <queryOnline.go:24> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"},"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:39:42 [INFO] <queryOnline.go:41> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[\"bo\",\"chen\"]"}
+2022/08/07 19:39:46 [DEBUG] <queryOnline.go:24> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"},"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:39:46 [INFO] <queryOnline.go:41> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[\"chen\",\"jia\"]"}
+2022/08/07 19:39:51 [INFO] <transfer.go:34> client close connect, service also close connect
+2022/08/07 19:39:51 [INFO] <process.go:75> client close connect
+2022/08/07 19:39:51 [INFO] <process.go:83> online user list={"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:39:56 [INFO] <transfer.go:34> client close connect, service also close connect
+2022/08/07 19:39:56 [INFO] <process.go:75> client close connect
+2022/08/07 19:39:56 [INFO] <process.go:83> online user list={"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:39:58 [INFO] <transfer.go:34> client close connect, service also close connect
+2022/08/07 19:39:58 [INFO] <process.go:75> client close connect
+2022/08/07 19:39:58 [INFO] <process.go:83> online user list={}
+2022/08/07 19:43:00 [INFO] <main.go:58> init log done!
+2022/08/07 19:43:00 [INFO] <main.go:74> service start success, port=8888
+2022/08/07 19:43:00 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:43:09 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:43:09 [INFO] <userProcess.go:118> {"userid":100,"userpwd":"123456","username":"chen","userstatus":0}登陆成功
+2022/08/07 19:43:09 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":100,\"UserName\":\"chen\"}"}
+2022/08/07 19:43:10 [DEBUG] <queryOnline.go:24> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"}}
+2022/08/07 19:43:10 [INFO] <queryOnline.go:44> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[]"}
+2022/08/07 19:43:20 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:43:20 [INFO] <userProcess.go:118> {"userid":200,"userpwd":"123456","username":"jia","userstatus":0}登陆成功
+2022/08/07 19:43:20 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":200,\"UserName\":\"jia\"}"}
+2022/08/07 19:43:22 [DEBUG] <queryOnline.go:24> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"},"200":{"Conn":{},"UserId":200,"UserName":"jia"}}
+2022/08/07 19:43:22 [INFO] <queryOnline.go:44> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[\"chen\"]"}
+2022/08/07 19:43:30 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/07 19:43:30 [INFO] <userProcess.go:118> {"userid":300,"userpwd":"123456","username":"bo","userstatus":0}登陆成功
+2022/08/07 19:43:30 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"respcode\":200,\"error\":\"\",\"UsersId\":300,\"UserName\":\"bo\"}"}
+2022/08/07 19:43:32 [DEBUG] <queryOnline.go:24> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"},"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:43:32 [INFO] <queryOnline.go:44> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[\"jia\",\"chen\"]"}
+2022/08/07 19:43:50 [DEBUG] <queryOnline.go:24> online User data={"100":{"Conn":{},"UserId":100,"UserName":"chen"},"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:43:50 [INFO] <queryOnline.go:44> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[\"bo\",\"jia\"]"}
+2022/08/07 19:43:55 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/07 19:43:55 [INFO] <process.go:73> client close connect
+2022/08/07 19:43:55 [INFO] <process.go:81> online user list={"200":{"Conn":{},"UserId":200,"UserName":"jia"},"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:43:57 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/07 19:43:57 [INFO] <process.go:73> client close connect
+2022/08/07 19:43:57 [INFO] <process.go:81> online user list={"300":{"Conn":{},"UserId":300,"UserName":"bo"}}
+2022/08/07 19:43:59 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/07 19:43:59 [INFO] <process.go:73> client close connect
+2022/08/07 19:43:59 [INFO] <process.go:81> online user list={}

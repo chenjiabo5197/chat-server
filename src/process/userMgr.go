@@ -25,22 +25,22 @@ func init() {
 	}
 }
 
-//完成对onlineUsers的添加
+// AddOnlineUsers 完成对onlineUsers的添加
 func (um *UserMgr) AddOnlineUsers(up *UserProcess) {
 	um.OnlineUsers[up.UserId] = up
 }
 
-// 完成对onlineUsers的删除
+// DeleteOnlineUsers 完成对onlineUsers的删除
 func (um *UserMgr) DeleteOnlineUsers(userId int) {
 	delete(um.OnlineUsers, userId)
 }
 
-//返回所有的在线用户
+// GetAllOnlineUsers 返回所有的在线用户
 func (um *UserMgr) GetAllOnlineUsers() map[int]*UserProcess {
 	return um.OnlineUsers
 }
 
-// 根据传入的UserId返回当前的在线用户的UserProcess指针
+// GetUserProcessById 根据传入的UserId返回当前的在线用户的UserProcess指针
 func (um *UserMgr) GetUserProcessById(userId int) (up *UserProcess, err error) {
 	up, ok := um.OnlineUsers[userId]
 

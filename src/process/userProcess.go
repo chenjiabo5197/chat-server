@@ -11,8 +11,9 @@ import (
 
 // UserProcess 用于处理用户的结构体(用户登录和注册)
 type UserProcess struct {
-	Conn   net.Conn
-	UserId int //后添加参数，用于表明该Conn是哪位用户的连接
+	Conn     net.Conn
+	UserId   int //后添加参数，用于表明该Conn是哪位用户的连接
+	UserName string
 }
 
 // NotifyOthersOnlineUser 通知其他用户当前用户上线/下线的消息
@@ -50,9 +51,7 @@ func (up *UserProcess) NotifyOthersOnlineUser(userId int) (err error) {
 	return
 }
 
-/*
-	通知其他用户当前用户上线/下线的消息  具体实现方法
-*/
+// NotifyOnlineUser 通知其他用户当前用户上线/下线的消息  具体实现方法
 func (up *UserProcess) NotifyOnlineUser(data []byte, conn net.Conn) (err error) {
 
 	tf := utils.Transfer{
@@ -66,9 +65,7 @@ func (up *UserProcess) NotifyOnlineUser(data []byte, conn net.Conn) (err error) 
 	return
 }
 
-/*
-	专门用于处理登陆的函数
-*/
+// ServerProcessLogin 专门用于处理登陆的函数
 func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId int, err error) {
 	//将mes反序列化成LoginMes结构体
 	var loginMes common.LoginMes
@@ -105,17 +102,19 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId int, err 
 			loginRespMes.Error = "服务器内部错误"
 		}
 	} else {
-		/*
-			用户登录成功先将用户加入到在线用户列表中,然后返回在线用户列表
-		*/
+		//用户登录成功将用户加入到在线用户列表中
+		up.UserName = user.UserName
+		up.UserId = user.UserId
+		Usermgr.AddOnlineUsers(up)
 		loginRespMes.RespCode = 200
-		Usermgr.OnlineUsers[loginMes.UserId] = up
-		//通知其他用户有新用户上线
-		np := NotifyProcessor{}
-		err = np.NotifyOthersOnlineUser(loginMes.UserId, 0)
-		for k := range Usermgr.OnlineUsers {
-			loginRespMes.UsersId = append(loginRespMes.UsersId, k)
-		}
+		loginRespMes.UserName = user.UserName
+		loginRespMes.UsersId = user.UserId
+		//通知其他用户有新用户上线,2.0下线，转为用户查询再返回
+		//np := NotifyProcessor{}
+		//err = np.NotifyOthersOnlineUser(user, 0)
+		//for k := range Usermgr.OnlineUsers {
+		//	loginRespMes.UsersId = append(loginRespMes.UsersId, k)
+		//}
 		logger.Info("%s登陆成功", utils.Struct2String(user))
 	}
 
@@ -150,9 +149,7 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId int, err 
 
 }
 
-/*
-	专门用于处理注册的函数
-*/
+// ServerProcessRigister 专门用于处理注册的函数
 func (up *UserProcess) ServerProcessRigister(mes *common.Message) (err error) {
 	//将mes反序列化成LoginMes结构体
 	var rigisterMes common.RegisterMes

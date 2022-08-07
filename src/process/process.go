@@ -10,13 +10,12 @@ import (
 
 // Processor 创建一个Process的结构体
 type Processor struct {
-	Conn  net.Conn
-	CurId int //保存此进程中和服务器连接的客户id，用于客户端下线后删除该客户端
+	Conn     net.Conn
+	CurId    int    //保存此进程中和服务器连接的客户id，用于客户端下线后删除该客户端
+	UserName string // 登陆的用户名
 }
 
-/*
-	根据客户端传来的不同消息类型来调用不同的函数处理
-*/
+// ServerProcessMes 根据客户端传来的不同消息类型来调用不同的函数处理
 func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 	//用于调试
 	//fmt.Println("mes=",mes)
@@ -46,6 +45,13 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 		sp := SmsProcessor{}
 		err = sp.SendMesToAllUsers(mes)
 		return
+	case common.QueryAllOnlineType:
+		//处理转发聊天消息
+		qo := QueryOnline{
+			Conn: p.Conn,
+		}
+		qo.QueryAllOnlineUser(mes.Data)
+		return
 	default:
 		//错误
 		logger.Error("unknown mes type")
@@ -53,7 +59,7 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 	}
 }
 
-func (p *Processor) Process2() (err error) {
+func (p *Processor) HandlerRecvMes() (err error) {
 	//循环读取客户端发送的消息
 	for {
 		//封装函数，传一个conn连接，读取客户端的输入，返回mes和err
@@ -68,7 +74,10 @@ func (p *Processor) Process2() (err error) {
 				//客户端关闭连接，在在线用户列表中将其删除,再通知客户端在其本地维护的onlineUserMap中删除该用户
 				Usermgr.DeleteOnlineUsers(p.CurId)
 				np := NotifyProcessor{}
-				err = np.NotifyOthersOnlineUser(p.CurId, 1)
+				user := &common.User{
+					UserId: p.CurId,
+				}
+				err = np.NotifyOthersOnlineUser(user, 1)
 				logger.Info("online user list=%s", utils.Struct2String(Usermgr.OnlineUsers))
 				return err
 			} else {

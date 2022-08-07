@@ -4,5 +4,5 @@ export GOPATH=$workspace
 export GO111MODULE=off
 
 gofmt -l -w -s src/
-go build -o server src/main/main.go
+go build -o chat-service src/main/main.go
 

@@ -58,9 +58,7 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 	return
 }
 
-/*
-	向所有在线的用户发送消息
-*/
+// SendMesToUser 向所有在线的用户发送消息
 func (sp *SmsProcessor) SendMesToUser(data []byte, conn net.Conn) (err error) {
 	tf := &utils.Transfer{
 		Conn: conn,

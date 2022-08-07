@@ -17,9 +17,7 @@ type Transfer struct {
 	buf [8096]byte
 }
 
-/*
-	接收函数，用于反序列化接收的数据，并将反序列化的结果返回
-*/
+// ReadPkg 接收函数，用于反序列化接收的数据，并将反序列化的结果返回
 func (t *Transfer) ReadPkg() (mes common.Message, err error) {
 	//创建byte切片，用于接收用户输入
 	//buf := make([]byte, 4096)
@@ -55,9 +53,7 @@ func (t *Transfer) ReadPkg() (mes common.Message, err error) {
 	return
 }
 
-/*
-	发送函数，用于向目标发送已经序列化好的数据
-*/
+// WritePkg 发送函数，用于向目标发送已经序列化好的数据
 func (t *Transfer) WritePkg(data []byte) (err error) {
 
 	//为了确保tcp发送消息的准确性，先发送mes的长度，再发送mes消息本体

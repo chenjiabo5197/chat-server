@@ -5,6 +5,7 @@
 *.so
 *.dylib
 *.idea
+chat-service
 server
 *.log.*
 
