@@ -12,12 +12,12 @@ import (
 // UserProcess 用于处理用户的结构体(用户登录和注册)
 type UserProcess struct {
 	Conn     net.Conn
-	UserId   int //后添加参数，用于表明该Conn是哪位用户的连接
+	UserId   string //后添加参数，用于表明该Conn是哪位用户的连接
 	UserName string
 }
 
 // NotifyOthersOnlineUser 通知其他用户当前用户上线/下线的消息
-func (up *UserProcess) NotifyOthersOnlineUser(userId int) (err error) {
+func (up *UserProcess) NotifyOthersOnlineUser(userId string) (err error) {
 	//实例一个返回消息对象
 	var notifyMes common.NotifyUserStatusMes
 	notifyMes.UserId = userId
@@ -66,7 +66,7 @@ func (up *UserProcess) NotifyOnlineUser(data []byte, conn net.Conn) (err error) 
 }
 
 // ServerProcessLogin 专门用于处理登陆的函数
-func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId int, err error) {
+func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId string, err error) {
 	//将mes反序列化成LoginMes结构体
 	var loginMes common.LoginMes
 	err = json.Unmarshal([]byte(mes.Data), &loginMes)

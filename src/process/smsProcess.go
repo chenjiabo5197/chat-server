@@ -17,6 +17,7 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 	//将受到的消息反序列化
 	var smsMes common.SmsMes
 	err = json.Unmarshal([]byte(mes.Data), &smsMes)
+	logger.Info("receive send to group message, data=%s", utils.Struct2String(smsMes))
 	if err != nil {
 		logger.Error("smsMes unmarshal err, err=%s", err.Error())
 		return
@@ -30,8 +31,9 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 
 	//组装服务器转发聊天消息实例
 	smsRespMes := common.SmsRespMes{
-		User:    smsMes.User,
-		Content: smsMes.Content,
+		User:        smsMes.User,
+		Content:     smsMes.Content,
+		SmsRespFrom: smsMes.UserName,
 	}
 	data, err := json.Marshal(smsRespMes)
 	if err != nil {
@@ -51,10 +53,11 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 	//拿到所有在线的用户和其连接
 	for id, up := range Usermgr.OnlineUsers {
 		if id == smsMes.UserId {
-			continue
+			continue // 不向自己发送
 		}
 		err = sp.SendMesToUser(data, up.Conn)
 	}
+	logger.Info("success send to group message, data=%s", utils.Struct2String(mesResp))
 	return
 }
 
@@ -63,6 +66,7 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
 	//将收到的消息反序列化
 	var smsMes common.SmsMes
 	err = json.Unmarshal([]byte(smsStr), &smsMes)
+	logger.Info("receive send to one message, data=%s", utils.Struct2String(smsMes))
 	if err != nil {
 		logger.Error("smsMes unmarshal err, err=%s", err.Error())
 		return
@@ -70,8 +74,9 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
 
 	//组装服务器转发聊天消息实例
 	smsRespMes := common.SmsRespMes{
-		User:    smsMes.User,
-		Content: smsMes.Content,
+		User:        smsMes.User,
+		Content:     smsMes.Content,
+		SmsRespFrom: smsMes.UserName,
 	}
 	data, err := json.Marshal(smsRespMes)
 	if err != nil {
@@ -79,7 +84,7 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
 		return
 	}
 	mesResp := common.Message{
-		Type: common.SmsRespMesType,
+		Type: common.SmsToOneRespMesType,
 		Data: string(data),
 	}
 	data, err = json.Marshal(mesResp)
@@ -90,10 +95,12 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
 
 	//遍历所有在线的用户和其连接，找到要发送的对象
 	for _, up := range Usermgr.OnlineUsers {
-		if smsMes.Target == up.UserName {
+		if smsMes.SmsMesTarget == up.UserName {
 			err = sp.SendMesToUser(data, up.Conn)
+			break
 		}
 	}
+	logger.Info("success send to one message, data=%s", utils.Struct2String(mesResp))
 	return
 }
 

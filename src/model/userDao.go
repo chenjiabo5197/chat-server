@@ -36,7 +36,7 @@ func NewUserDao(pool *redis.Pool) (userDao *UserDao) {
 /*
 	定义一个方法，根据传入的redis连接和userid，返回user实例对象或错误
 */
-func (up *UserDao) getUserById(conn redis.Conn, userId int) (user *common.User, err error) {
+func (up *UserDao) getUserById(conn redis.Conn, userId string) (user *common.User, err error) {
 
 	//通过传入的id去redis查询
 	res, err := redis.String(conn.Do("HGet", "users", userId))
@@ -61,7 +61,7 @@ func (up *UserDao) getUserById(conn redis.Conn, userId int) (user *common.User, 
 	根据传入的用户名和密码返回登录的结果
 	如果登录成功，返回一个User对象，登陆失败，返回错误码
 */
-func (up *UserDao) Login(userId int, userPwd string) (user *common.User, err error) {
+func (up *UserDao) Login(userId string, userPwd string) (user *common.User, err error) {
 
 	//从redis连接池中获取一个连接
 	conn := up.pool.Get()

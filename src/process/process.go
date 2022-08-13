@@ -11,7 +11,7 @@ import (
 // Processor 创建一个Process的结构体
 type Processor struct {
 	Conn     net.Conn
-	CurId    int    //保存此进程中和服务器连接的客户id，用于客户端下线后删除该客户端
+	CurId    string //保存此进程中和服务器连接的客户id，用于客户端下线后删除该客户端
 	UserName string // 登陆的用户名
 }
 
@@ -29,8 +29,7 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 		id, err := up.ServerProcessLogin(mes)
 		if err == nil {
 			//此时客户端已经登录成功
-			p.CurId = id
-			//fmt.Println("p.CurId=",p.CurId)
+			logger.Info("%s login success", id)
 		}
 		return err
 	case common.RegisterMesType:
@@ -59,7 +58,7 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 		return
 	default:
 		//错误
-		logger.Error("unknown mes type")
+		logger.Error("unknown mes type，type=%v", mes.Type)
 		return
 	}
 }
