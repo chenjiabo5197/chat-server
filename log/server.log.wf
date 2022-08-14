@@ -19,3 +19,32 @@
 2022/08/13 12:00:50 [ERROR] <transfer.go:69> send data length err, err=write tcp 127.0.0.1:8888->127.0.0.1:38472: use of closed network connection
 2022/08/13 12:00:50 [ERROR] <notifyProcess.go:81> service transfer mes err, err=write tcp 127.0.0.1:8888->127.0.0.1:38472: use of closed network connection
 2022/08/13 12:00:50 [ERROR] <main.go:37> client communicate with service err, err=write tcp 127.0.0.1:8888->127.0.0.1:38472: use of closed network connection
+2022/08/14 08:29:38 [ERROR] <smsProcess.go:109> SendMesToOne||cannot find jia in redis
+2022/08/14 08:30:07 [ERROR] <smsProcess.go:127> offline message hset to redis err, err=redigo: nil returned||mesResp={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:32:39 [ERROR] <transfer.go:75> send data err, err=write tcp 127.0.0.1:8888->127.0.0.1:56940: write: broken pipe
+2022/08/14 08:32:39 [ERROR] <notifyProcess.go:81> service transfer mes err, err=write tcp 127.0.0.1:8888->127.0.0.1:56940: write: broken pipe
+2022/08/14 08:32:39 [ERROR] <main.go:37> client communicate with service err, err=write tcp 127.0.0.1:8888->127.0.0.1:56940: write: broken pipe
+2022/08/14 08:33:00 [ERROR] <smsProcess.go:127> offline message hset to redis err, err=redigo: nil returned||mesResp={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:33:57 [ERROR] <transfer.go:75> send data err, err=write tcp 127.0.0.1:8888->127.0.0.1:56946: write: broken pipe
+2022/08/14 08:33:57 [ERROR] <notifyProcess.go:81> service transfer mes err, err=write tcp 127.0.0.1:8888->127.0.0.1:56946: write: broken pipe
+2022/08/14 08:33:57 [ERROR] <main.go:37> client communicate with service err, err=write tcp 127.0.0.1:8888->127.0.0.1:56946: write: broken pipe
+2022/08/14 08:34:22 [ERROR] <userDao.go:100> hset offline message to redis err, err=redigo: unexpected type for String, got type int64
+2022/08/14 08:34:22 [ERROR] <smsProcess.go:127> offline message hset to redis err, err=redigo: unexpected type for String, got type int64||mesResp={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:35:52 [ERROR] <transfer.go:75> send data err, err=write tcp 127.0.0.1:8888->127.0.0.1:56952: write: broken pipe
+2022/08/14 08:35:52 [ERROR] <notifyProcess.go:81> service transfer mes err, err=write tcp 127.0.0.1:8888->127.0.0.1:56952: write: broken pipe
+2022/08/14 08:35:52 [ERROR] <main.go:37> client communicate with service err, err=write tcp 127.0.0.1:8888->127.0.0.1:56952: write: broken pipe
+2022/08/14 08:36:15 [ERROR] <userDao.go:120> offline message unmarshal err, err=invalid character 'R' looking for beginning of object key string
+2022/08/14 08:36:15 [ERROR] <smsProcess.go:127> offline message hset to redis err, err=invalid character 'R' looking for beginning of object key string||mesResp={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:41:44 [ERROR] <transfer.go:69> send data length err, err=write tcp 127.0.0.1:8888->127.0.0.1:56972: use of closed network connection
+2022/08/14 08:41:44 [ERROR] <smsProcess.go:146> service transfer mes err, err=write tcp 127.0.0.1:8888->127.0.0.1:56972: use of closed network connection
+2022/08/14 08:42:55 [ERROR] <transfer.go:69> send data length err, err=write tcp 127.0.0.1:8888->127.0.0.1:56972: use of closed network connection
+2022/08/14 08:42:55 [ERROR] <smsProcess.go:146> service transfer mes err, err=write tcp 127.0.0.1:8888->127.0.0.1:56972: use of closed network connection
+2022/08/14 08:48:35 [ERROR] <transfer.go:75> send data err, err=write tcp 127.0.0.1:8888->127.0.0.1:56966: write: broken pipe
+2022/08/14 08:48:35 [ERROR] <notifyProcess.go:81> service transfer mes err, err=write tcp 127.0.0.1:8888->127.0.0.1:56966: write: broken pipe
+2022/08/14 08:48:35 [ERROR] <main.go:37> client communicate with service err, err=write tcp 127.0.0.1:8888->127.0.0.1:56966: write: broken pipe
+2022/08/14 08:49:06 [ERROR] <userDao.go:120> offline message unmarshal err, err=invalid character 'R' looking for beginning of object key string
+2022/08/14 08:49:06 [ERROR] <smsProcess.go:131> offline message hset to redis err, err=invalid character 'R' looking for beginning of object key string||mesResp={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello2\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:50:36 [ERROR] <userDao.go:102> hset offline message to redis err, err=redigo: unexpected type for String, got type int64
+2022/08/14 08:50:36 [ERROR] <smsProcess.go:131> offline message hset to redis err, err=redigo: unexpected type for String, got type int64||mesResp={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:52:16 [ERROR] <userDao.go:102> hset offline message to redis err, err=redigo: unexpected type for String, got type int64
+2022/08/14 08:52:16 [ERROR] <smsProcess.go:131> offline message hset to redis err, err=redigo: unexpected type for String, got type int64||mesResp={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}

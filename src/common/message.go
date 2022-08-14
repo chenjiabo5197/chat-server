@@ -16,9 +16,9 @@ const (
 	RecvSmsMesType          MesType = "RecvSmsMes"
 	QueryAllOnlineType      MesType = "QueryAllOnline"
 	AllOnlineRespType       MesType = "AllOnlineResp"
-	SmsToOneMesType         MesType = "SmsToOneMes" // 1对1通信
-	RecvSmsToOneMesType		MesType = "RecvSmsToOneMes" // 收到的1对1通信
-	SmsRespMesType     		MesType = "SmsRespMes"  // 发送1对1与群发消息的结果 ,失败或成功
+	SmsToOneMesType         MesType = "SmsToOneMes"     // 1对1通信
+	RecvSmsToOneMesType     MesType = "RecvSmsToOneMes" // 收到的1对1通信
+	SmsRespMesType          MesType = "SmsRespMes"      // 发送1对1与群发消息的结果 ,失败或成功
 )
 
 //定义几个用户在线状态

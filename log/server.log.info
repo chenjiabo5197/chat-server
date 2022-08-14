@@ -158,3 +158,143 @@
 2022/08/13 12:00:50 [INFO] <transfer.go:32> client close connect, service also close connect
 2022/08/13 12:00:50 [INFO] <process.go:77> client close connect
 2022/08/13 12:00:50 [INFO] <process.go:85> online user list={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"},"a6907acf5b337a322193f19b6698c867":{"Conn":{},"UserId":"a6907acf5b337a322193f19b6698c867","UserName":"jia"}}
+2022/08/14 08:14:59 [INFO] <main.go:58> init log done!
+2022/08/14 08:14:59 [INFO] <main.go:74> service start success, port=8888
+2022/08/14 08:14:59 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:15:17 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:15:17 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":500,\"error\":\"用户不存在\",\"UsersId\":\"\",\"UserName\":\"\"}"}
+2022/08/14 08:15:17 [INFO] <process.go:31> f899139df5e1059396431415e770c6dd login success
+2022/08/14 08:15:17 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:15:17 [INFO] <process.go:82> client close connect
+2022/08/14 08:15:17 [INFO] <process.go:90> online user list={}
+2022/08/14 08:15:32 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:15:32 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":500,\"error\":\"用户不存在\",\"UsersId\":\"\",\"UserName\":\"\"}"}
+2022/08/14 08:15:32 [INFO] <process.go:31> f899139df5e1059396431415e770c6dd login success
+2022/08/14 08:15:32 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:15:32 [INFO] <process.go:82> client close connect
+2022/08/14 08:15:32 [INFO] <process.go:90> online user list={}
+2022/08/14 08:16:16 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:16:16 [INFO] <userProcess.go:140> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":500,\"error\":\"用户不存在\",\"UsersId\":\"\",\"UserName\":\"\"}"}
+2022/08/14 08:16:16 [INFO] <process.go:31> a1a8887793acfc199182a649e905daab login success
+2022/08/14 08:16:16 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:16:16 [INFO] <process.go:82> client close connect
+2022/08/14 08:16:16 [INFO] <process.go:90> online user list={}
+2022/08/14 08:28:01 [INFO] <main.go:58> init log done!
+2022/08/14 08:28:01 [INFO] <main.go:74> service start success, port=8888
+2022/08/14 08:28:01 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:28:14 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:28:14 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":500,\"error\":\"用户不存在\",\"UsersId\":\"\",\"UserName\":\"\"}"}
+2022/08/14 08:28:14 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:28:14 [INFO] <process.go:78> client close connect
+2022/08/14 08:28:14 [INFO] <process.go:86> online user list={}
+2022/08/14 08:28:35 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:28:35 [INFO] <userProcess.go:160> RegisterMes={"user":{"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"123456","user_name":"chen","user_status":0,"user_friend":null,"user_group":null}}
+2022/08/14 08:28:35 [DEBUG] <userDao.go:146> register||user={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"123456","user_name":"chen","user_status":0,"user_friend":null,"user_group":null}
+2022/08/14 08:28:35 [INFO] <userDao.go:160> register||save user message success
+2022/08/14 08:28:35 [INFO] <userProcess.go:177> register success
+2022/08/14 08:28:35 [INFO] <userProcess.go:211> success send to client status resp data={"type":"RegisterRespMes","data":"{\"resp_code\":200,\"error\":\"\"}"}
+2022/08/14 08:28:35 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:28:35 [INFO] <process.go:78> client close connect
+2022/08/14 08:28:35 [INFO] <process.go:86> online user list={}
+2022/08/14 08:29:17 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:29:17 [INFO] <userProcess.go:118> {"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"123456","user_name":"chen","user_status":0,"user_friend":null,"user_group":null}登陆成功
+2022/08/14 08:29:17 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":200,\"error\":\"\",\"UsersId\":\"a1a8887793acfc199182a649e905daab\",\"UserName\":\"chen\"}"}
+2022/08/14 08:29:26 [DEBUG] <queryOnline.go:24> online User data={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"}}
+2022/08/14 08:29:26 [INFO] <queryOnline.go:44> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[]"}
+2022/08/14 08:29:38 [INFO] <smsProcess.go:79> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:29:38 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":404,\"error\":\"用户不存在\"}"}
+2022/08/14 08:29:55 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:29:55 [INFO] <userProcess.go:160> RegisterMes={"user":{"user_id":"a6907acf5b337a322193f19b6698c867","user_pwd":"123456","user_name":"jia","user_status":0,"user_friend":null,"user_group":null}}
+2022/08/14 08:29:55 [DEBUG] <userDao.go:146> register||user={"user_id":"a6907acf5b337a322193f19b6698c867","user_pwd":"123456","user_name":"jia","user_status":0,"user_friend":null,"user_group":null}
+2022/08/14 08:29:55 [INFO] <userDao.go:160> register||save user message success
+2022/08/14 08:29:55 [INFO] <userProcess.go:177> register success
+2022/08/14 08:29:55 [INFO] <userProcess.go:211> success send to client status resp data={"type":"RegisterRespMes","data":"{\"resp_code\":200,\"error\":\"\"}"}
+2022/08/14 08:29:55 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:29:55 [INFO] <process.go:78> client close connect
+2022/08/14 08:29:55 [INFO] <process.go:86> online user list={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"}}
+2022/08/14 08:30:07 [INFO] <smsProcess.go:79> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:30:07 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"redigo: nil returned\"}"}
+2022/08/14 08:32:39 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:32:39 [INFO] <process.go:78> client close connect
+2022/08/14 08:32:39 [INFO] <process.go:86> online user list={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"}}
+2022/08/14 08:32:43 [INFO] <main.go:58> init log done!
+2022/08/14 08:32:43 [INFO] <main.go:74> service start success, port=8888
+2022/08/14 08:32:43 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:32:55 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:32:55 [INFO] <userProcess.go:118> {"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"123456","user_name":"chen","user_status":0,"user_friend":null,"user_group":null}登陆成功
+2022/08/14 08:32:55 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":200,\"error\":\"\",\"UsersId\":\"a1a8887793acfc199182a649e905daab\",\"UserName\":\"chen\"}"}
+2022/08/14 08:33:00 [INFO] <smsProcess.go:79> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:33:00 [INFO] <userDao.go:94> err=redigo: nil returned||type=*errors.errorString
+2022/08/14 08:33:00 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"redigo: nil returned\"}"}
+2022/08/14 08:33:57 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:33:57 [INFO] <process.go:78> client close connect
+2022/08/14 08:33:57 [INFO] <process.go:86> online user list={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"}}
+2022/08/14 08:34:07 [INFO] <main.go:58> init log done!
+2022/08/14 08:34:07 [INFO] <main.go:74> service start success, port=8888
+2022/08/14 08:34:07 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:34:15 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:34:15 [INFO] <userProcess.go:118> {"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"123456","user_name":"chen","user_status":0,"user_friend":null,"user_group":null}登陆成功
+2022/08/14 08:34:15 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":200,\"error\":\"\",\"UsersId\":\"a1a8887793acfc199182a649e905daab\",\"UserName\":\"chen\"}"}
+2022/08/14 08:34:22 [INFO] <smsProcess.go:79> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:34:22 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"redigo: unexpected type for String, got type int64\"}"}
+2022/08/14 08:35:52 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:35:52 [INFO] <process.go:78> client close connect
+2022/08/14 08:35:52 [INFO] <process.go:86> online user list={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"}}
+2022/08/14 08:36:00 [INFO] <main.go:58> init log done!
+2022/08/14 08:36:00 [INFO] <main.go:74> service start success, port=8888
+2022/08/14 08:36:00 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:36:08 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:36:08 [INFO] <userProcess.go:118> {"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"123456","user_name":"chen","user_status":0,"user_friend":null,"user_group":null}登陆成功
+2022/08/14 08:36:08 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":200,\"error\":\"\",\"UsersId\":\"a1a8887793acfc199182a649e905daab\",\"UserName\":\"chen\"}"}
+2022/08/14 08:36:15 [INFO] <smsProcess.go:79> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:36:15 [INFO] <userDao.go:95> err=invalid character 'R' looking for beginning of object key string||type=*json.SyntaxError
+2022/08/14 08:36:15 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"invalid character 'R' looking for beginning of object key string\"}"}
+2022/08/14 08:38:47 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:38:47 [INFO] <userProcess.go:118> {"user_id":"a6907acf5b337a322193f19b6698c867","user_pwd":"123456","user_name":"jia","user_status":0,"user_friend":null,"user_group":null}登陆成功
+2022/08/14 08:38:47 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":200,\"error\":\"\",\"UsersId\":\"a6907acf5b337a322193f19b6698c867\",\"UserName\":\"jia\"}"}
+2022/08/14 08:38:52 [DEBUG] <queryOnline.go:24> online User data={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"},"a6907acf5b337a322193f19b6698c867":{"Conn":{},"UserId":"a6907acf5b337a322193f19b6698c867","UserName":"jia"}}
+2022/08/14 08:38:52 [INFO] <queryOnline.go:44> QueryAllOnlineUser|| send Online User data={"type":"AllOnlineResp","data":"[\"jia\"]"}
+2022/08/14 08:39:01 [INFO] <smsProcess.go:79> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:39:01 [INFO] <smsProcess.go:120> success send to online one message, data={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:39:01 [INFO] <smsProcess.go:132> success send to one message, data={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}||isOnline=true
+2022/08/14 08:39:01 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":0,\"error\":\"\"}"}
+2022/08/14 08:40:44 [INFO] <main.go:58> init log done!
+2022/08/14 08:40:44 [INFO] <main.go:74> service start success, port=8888
+2022/08/14 08:40:44 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:41:02 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:41:02 [INFO] <userProcess.go:118> {"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"123456","user_name":"chen","user_status":0,"user_friend":null,"user_group":null}登陆成功
+2022/08/14 08:41:02 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":200,\"error\":\"\",\"UsersId\":\"a1a8887793acfc199182a649e905daab\",\"UserName\":\"chen\"}"}
+2022/08/14 08:41:08 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:41:08 [INFO] <userProcess.go:118> {"user_id":"a6907acf5b337a322193f19b6698c867","user_pwd":"123456","user_name":"jia","user_status":0,"user_friend":null,"user_group":null}登陆成功
+2022/08/14 08:41:08 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":200,\"error\":\"\",\"UsersId\":\"a6907acf5b337a322193f19b6698c867\",\"UserName\":\"jia\"}"}
+2022/08/14 08:41:20 [INFO] <smsProcess.go:81> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:41:20 [INFO] <smsProcess.go:122> success send to online one message, data={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:41:20 [INFO] <smsProcess.go:134> success send to one message, data={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello\",\"sms_resp_from\":\"chen\"}"}||isOnline=true
+2022/08/14 08:41:20 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":200,\"error\":\"\"}"}
+2022/08/14 08:41:30 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:41:30 [INFO] <process.go:78> client close connect
+2022/08/14 08:41:30 [INFO] <process.go:86> online user list={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"},"a6907acf5b337a322193f19b6698c867":{"Conn":{},"UserId":"a6907acf5b337a322193f19b6698c867","UserName":"jia"}}
+2022/08/14 08:41:44 [INFO] <smsProcess.go:81> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello2","sms_mes_target":"jia"}
+2022/08/14 08:41:44 [INFO] <smsProcess.go:122> success send to online one message, data={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello2\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:41:44 [INFO] <smsProcess.go:134> success send to one message, data={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello2\",\"sms_resp_from\":\"chen\"}"}||isOnline=true
+2022/08/14 08:41:44 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"write tcp 127.0.0.1:8888-\\u003e127.0.0.1:56972: use of closed network connection\"}"}
+2022/08/14 08:42:55 [INFO] <smsProcess.go:81> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello2","sms_mes_target":"jia"}
+2022/08/14 08:42:55 [INFO] <smsProcess.go:122> success send to online one message, data={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello2\",\"sms_resp_from\":\"chen\"}"}
+2022/08/14 08:42:55 [INFO] <smsProcess.go:134> success send to one message, data={"type":"RecvSmsToOneMes","data":"{\"user_id\":\"a1a8887793acfc199182a649e905daab\",\"user_pwd\":\"\",\"user_name\":\"chen\",\"user_status\":0,\"user_friend\":null,\"user_group\":null,\"content\":\"hello2\",\"sms_resp_from\":\"chen\"}"}||isOnline=true
+2022/08/14 08:42:55 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"write tcp 127.0.0.1:8888-\\u003e127.0.0.1:56972: use of closed network connection\"}"}
+2022/08/14 08:48:35 [INFO] <transfer.go:32> client close connect, service also close connect
+2022/08/14 08:48:35 [INFO] <process.go:78> client close connect
+2022/08/14 08:48:35 [INFO] <process.go:86> online user list={"a1a8887793acfc199182a649e905daab":{"Conn":{},"UserId":"a1a8887793acfc199182a649e905daab","UserName":"chen"},"a6907acf5b337a322193f19b6698c867":{"Conn":{},"UserId":"a6907acf5b337a322193f19b6698c867","UserName":"jia"}}
+2022/08/14 08:48:42 [INFO] <main.go:58> init log done!
+2022/08/14 08:48:42 [INFO] <main.go:74> service start success, port=8888
+2022/08/14 08:48:42 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:48:53 [DEBUG] <main.go:78> waiting for client connect...
+2022/08/14 08:48:53 [INFO] <userProcess.go:118> {"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"123456","user_name":"chen","user_status":0,"user_friend":null,"user_group":null}登陆成功
+2022/08/14 08:48:53 [INFO] <userProcess.go:146> send to client login resp data={"type":"LoginRespMes","data":"{\"resp_code\":200,\"error\":\"\",\"UsersId\":\"a1a8887793acfc199182a649e905daab\",\"UserName\":\"chen\"}"}
+2022/08/14 08:49:06 [INFO] <smsProcess.go:81> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello2","sms_mes_target":"jia"}
+2022/08/14 08:49:06 [INFO] <userDao.go:95> err=invalid character 'R' looking for beginning of object key string||type=*json.SyntaxError
+2022/08/14 08:49:06 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"invalid character 'R' looking for beginning of object key string\"}"}
+2022/08/14 08:50:36 [INFO] <smsProcess.go:81> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:50:36 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"redigo: unexpected type for String, got type int64\"}"}
+2022/08/14 08:52:16 [INFO] <smsProcess.go:81> receive send to one message, data={"user_id":"a1a8887793acfc199182a649e905daab","user_pwd":"","user_name":"chen","user_status":0,"user_friend":null,"user_group":null,"content":"hello","sms_mes_target":"jia"}
+2022/08/14 08:52:16 [INFO] <userProcess.go:211> success send to client status resp data={"type":"SmsRespMes","data":"{\"resp_code\":500,\"error\":\"redigo: unexpected type for String, got type int64\"}"}

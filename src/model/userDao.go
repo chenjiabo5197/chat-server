@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	logger "github.com/shengkehua/xlog4go"
+	"reflect"
 	"utils"
 )
 
@@ -17,8 +18,8 @@ var (
 )
 
 const (
-	USER_REDIS_PREFIX_KEY = "chat_service_user_"
-	USRR_ONLINE_KEY = "chat_service_online_user"
+	USER_REDIS_PREFIX_KEY    = "chat_service_user_"
+	USRR_ONLINE_KEY          = "chat_service_online_user"
 	USER_OFFLINE_MESSAGE_KEY = "chat_service_offline_message"
 )
 
@@ -41,7 +42,7 @@ func NewUserDao(pool *redis.Pool) (userDao *UserDao) {
 }
 
 func GetRedisUserKey(userId string) string {
-	return fmt.Sprintf(USER_REDIS_PREFIX_KEY+userId)
+	return fmt.Sprintf(USER_REDIS_PREFIX_KEY + userId)
 }
 
 //根据传入的key，返回user实例对象或错误
@@ -82,18 +83,21 @@ func (up *UserDao) SetDataByKey(key string, data string) (err error) {
 	return
 }
 
-//根据传入的username，储存发给该用户的离线消息到redis中 hash类型
+// HSetDataByName 根据传入的username，储存发给该用户的离线消息到redis中 hash类型
 func (up *UserDao) HSetDataByName(userName string, mesResp common.Message) (err error) {
 	//从redis连接池中获取一个连接
 	redisClient := up.pool.Get()
 	defer redisClient.Close()
 	//先将redis中目标的离线消息拿到手，然后再增加
-	data, err := up.HGetDataByName(userName)
-	if err != nil {
+	var data []common.Message
+	data, err = up.HGetDataByName(userName)
+	if err != nil && err != redis.ErrNil {
+		logger.Error("err=%v||type=%v", err, reflect.TypeOf(err))
 		return
 	}
 	data = append(data, mesResp)
-	_, err = redis.String(redisClient.Do("HSet", USER_OFFLINE_MESSAGE_KEY, userName, data))
+	dataByte, _ := json.Marshal(data)
+	_, err = redis.String(redisClient.Do("HSet", USER_OFFLINE_MESSAGE_KEY, userName, string(dataByte)))
 	if err != nil {
 		logger.Error("hset offline message to redis err, err=%v", err)
 		return
@@ -129,7 +133,7 @@ func (up *UserDao) Login(userId string, userPwd string) (user *common.User, err 
 	redisClient := up.pool.Get()
 	defer redisClient.Close()
 
-	user, err = up.GetDataByKey(USER_REDIS_PREFIX_KEY+userId)
+	user, err = up.GetDataByKey(USER_REDIS_PREFIX_KEY + userId)
 	if err != nil { //证明数据库中不存在这个id的用户
 		return
 	}
@@ -144,7 +148,7 @@ func (up *UserDao) Login(userId string, userPwd string) (user *common.User, err 
 //根据传入的User实例对象返回注册的结果
 func (up *UserDao) RegisterUser(user common.User) (err error) {
 	logger.Debug("register||user=%s", utils.Struct2String(user))
-	_, err = up.GetDataByKey(USER_REDIS_PREFIX_KEY+user.UserId)
+	_, err = up.GetDataByKey(USER_REDIS_PREFIX_KEY + user.UserId)
 	if err == nil { //证明在数据库中存在这个id的用户
 		err = ERROR_USER_EXISTS
 		return

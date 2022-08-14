@@ -22,13 +22,13 @@ func (np *NotifyProcessor) NotifyOthersOnlineUser(user *common.User, status int)
 	notifyMes.UserId = user.UserId
 	notifyMes.UserName = user.UserName
 	switch status {
-		case 0:
-			notifyMes.UserStatus = common.UserOnline
-		case 1:
-			notifyMes.UserStatus = common.UserOffline
-		default:
-			logger.Error("unknown type")
-			return
+	case 0:
+		notifyMes.UserStatus = common.UserOnline
+	case 1:
+		notifyMes.UserStatus = common.UserOffline
+	default:
+		logger.Error("unknown type")
+		return
 	}
 
 	data, err := json.Marshal(notifyMes)

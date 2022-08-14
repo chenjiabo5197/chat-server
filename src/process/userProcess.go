@@ -137,16 +137,14 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId string, e
 		return
 	}
 
-	logger.Info("send to client login resp data=%s", data)
-
 	//将Message序列化的结果发送给客户端
 	//mvc模式，所以必须先创建一个Transfer实例，然后读取
 	tf := utils.Transfer{
 		Conn: up.Conn,
 	}
 	err = tf.WritePkg(data)
+	logger.Info("send to client login resp data=%s", data)
 	return loginMes.UserId, err
-
 }
 
 // ServerProcessRigister 专门用于处理注册的函数

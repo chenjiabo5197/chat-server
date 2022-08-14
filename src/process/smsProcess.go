@@ -70,6 +70,8 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error, statusStr string
 		if err != nil && statusResp.RespCode == 0 {
 			statusResp.RespCode = 500
 			statusResp.Error = err.Error()
+		} else {
+			statusResp.RespCode = 200
 		}
 		statusStr = utils.Struct2String(statusResp)
 	}()
@@ -105,7 +107,7 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error, statusStr string
 	targetUserId := utils.GetMd5Value(smsMes.SmsMesTarget)
 	targetKey := model.GetRedisUserKey(targetUserId)
 	_, err = model.MyUserDao.GetDataByKey(targetKey)
-	if err != nil {  // 该用户不存在
+	if err != nil { // 该用户不存在
 		logger.Error("SendMesToOne||cannot find %s in redis", smsMes.SmsMesTarget)
 		statusResp.Error = err.Error()
 		statusResp.RespCode = 404
@@ -117,7 +119,9 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error, statusStr string
 		if smsMes.SmsMesTarget == up.UserName {
 			isOnline = true
 			err = sp.SendMesToUser(data, up.Conn)
-			logger.Info("success send to online one message, data=%s", string(data))
+			if err != nil {
+				logger.Info("success send to online one message, data=%s", string(data))
+			}
 			break
 		}
 	}

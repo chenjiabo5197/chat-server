@@ -21,50 +21,47 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 	//fmt.Println("mes=",mes)
 
 	switch mes.Type {
-		case common.LoginMesType:  //处理登陆的函数
-			up := UserProcess{
-				Conn: p.Conn,
-			}
-			id, err := up.ServerProcessLogin(mes)
-			if err == nil {
-				//此时客户端已经登录成功
-				logger.Info("%s login success", id)
-			}
-			return err
-		case common.RegisterMesType:   //处理注册的函数
-			up := UserProcess{
-				Conn: p.Conn,
-			}
-			err = up.ServerProcessRegister(mes)
-			return
-		case common.SmsMesType:  //处理转发广播消息
-			sp := SmsProcessor{}
-			_, statusRespStr := sp.SendMesToAllUsers(mes)
-			up := UserProcess{
-				Conn: p.Conn,
-			}
-			// 将发送消息的结果返回给客户端
-			err = up.SendRespStatus(statusRespStr, common.SmsRespMesType)
-			return
-		case common.QueryAllOnlineType:  //处理查询在线用户
-			qo := QueryOnline{
-				Conn: p.Conn,
-			}
-			qo.QueryAllOnlineUser(mes.Data)
-			return
-		case common.SmsToOneMesType:  //处理转发1对1聊天消息
-			sp := SmsProcessor{}
-			_, statusRespStr := sp.SendMesToOne(mes.Data)
-			up := UserProcess{
-				Conn: p.Conn,
-			}
-			// 将发送消息的结果返回给客户端
-			err = up.SendRespStatus(statusRespStr, common.SmsRespMesType)
-			return
-		default:
-			//错误
-			logger.Error("unknown mes type，type=%v", mes.Type)
-			return
+	case common.LoginMesType: //处理登陆的函数
+		up := UserProcess{
+			Conn: p.Conn,
+		}
+		userId, err := up.ServerProcessLogin(mes)
+		p.CurId = userId
+		return err
+	case common.RegisterMesType: //处理注册的函数
+		up := UserProcess{
+			Conn: p.Conn,
+		}
+		err = up.ServerProcessRegister(mes)
+		return
+	case common.SmsMesType: //处理转发广播消息
+		sp := SmsProcessor{}
+		_, statusRespStr := sp.SendMesToAllUsers(mes)
+		up := UserProcess{
+			Conn: p.Conn,
+		}
+		// 将发送消息的结果返回给客户端
+		err = up.SendRespStatus(statusRespStr, common.SmsRespMesType)
+		return
+	case common.QueryAllOnlineType: //处理查询在线用户
+		qo := QueryOnline{
+			Conn: p.Conn,
+		}
+		qo.QueryAllOnlineUser(mes.Data)
+		return
+	case common.SmsToOneMesType: //处理转发1对1聊天消息
+		sp := SmsProcessor{}
+		_, statusRespStr := sp.SendMesToOne(mes.Data)
+		up := UserProcess{
+			Conn: p.Conn,
+		}
+		// 将发送消息的结果返回给客户端
+		err = up.SendRespStatus(statusRespStr, common.SmsRespMesType)
+		return
+	default:
+		//错误
+		logger.Error("unknown mes type，type=%v", mes.Type)
+		return
 	}
 }
 
@@ -79,7 +76,7 @@ func (p *Processor) HandlerRecvMes() (err error) {
 		mes, err := tf.ReadPkg()
 		if err != nil {
 			if err == io.EOF {
-				logger.Info("client close connect")
+				logger.Info("client close connect, id")
 				//客户端关闭连接，在在线用户列表中将其删除,再通知客户端在其本地维护的onlineUserMap中删除该用户
 				Usermgr.DeleteOnlineUsers(p.CurId)
 				np := NotifyProcessor{}
