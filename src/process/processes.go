@@ -25,8 +25,12 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 		up := UserProcess{
 			Conn: p.Conn,
 		}
-		userId, err := up.ServerProcessLogin(mes)
-		p.CurId = userId
+		user, err, isLogin := up.ServerProcessLogin(mes)
+		p.CurId = user.UserId
+		if isLogin {
+			sp := SmsProcessor{}
+			sp.SendOfflineMessage(p.Conn, user.UserName)
+		}
 		return err
 	case common.RegisterMesType: //处理注册的函数
 		up := UserProcess{

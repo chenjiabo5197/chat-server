@@ -11,3 +11,5 @@
 4.0：目前用户名和密码储存在hash结构中，想将其改为string类型，每个用户一个key，里面储存id，name，passwd，friend(好友),group(群组)等信息
     用户的key用id还是name，id抽象，name形象 (将userid改为username的md5形式)
     status信息似乎不必保存，可以考虑将用户在线信息保存在hash结构的redis中(只需要该用户的id，name)，用户每次获取在线信息服务器去redis中获取
+
+5.0:目前可以向离线用户发送消息，但是消息储存在redis中没有在该用户登录时发送，要改为发送给该用户的离线消息在该用户登录时立即发送给该用户

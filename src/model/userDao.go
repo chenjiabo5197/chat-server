@@ -97,7 +97,7 @@ func (up *UserDao) HSetDataByName(userName string, mesResp common.Message) (err 
 	}
 	data = append(data, mesResp)
 	dataByte, _ := json.Marshal(data)
-	_, err = redis.String(redisClient.Do("HSet", USER_OFFLINE_MESSAGE_KEY, userName, string(dataByte)))
+	_, err = redisClient.Do("HSet", USER_OFFLINE_MESSAGE_KEY, userName, string(dataByte))
 	if err != nil {
 		logger.Error("hset offline message to redis err, err=%v", err)
 		return
@@ -105,7 +105,7 @@ func (up *UserDao) HSetDataByName(userName string, mesResp common.Message) (err 
 	return
 }
 
-//根据传入的username，返回该用户目前的离线消息
+// HGetDataByName 根据传入的username，返回该用户目前的离线消息
 func (up *UserDao) HGetDataByName(userName string) (data []common.Message, err error) {
 	//从redis连接池中获取一个连接
 	redisClient := up.pool.Get()
@@ -113,11 +113,25 @@ func (up *UserDao) HGetDataByName(userName string) (data []common.Message, err e
 	//先将redis中目标的离线消息拿到手，然后再增加
 	content, err := redis.String(redisClient.Do("HGet", USER_OFFLINE_MESSAGE_KEY, userName))
 	if err != nil {
+		logger.Error("HGet data from chat_service_offline_message err, err=%v", err)
 		return
 	}
 	err = json.Unmarshal([]byte(content), &data)
 	if err != nil {
 		logger.Error("offline message unmarshal err, err=%v", err)
+		return
+	}
+	return
+}
+
+// HDelDataByName 根据传入的用户名，删除该用户的离线消息
+func (up *UserDao) HDelDataByName(userName string) (err error) {
+	//从redis连接池中获取一个连接
+	redisClient := up.pool.Get()
+	defer redisClient.Close()
+	_, err = redisClient.Do("HDel", USER_OFFLINE_MESSAGE_KEY, userName)
+	if err != nil {
+		logger.Error("hdel offline message err, err=%v", err)
 		return
 	}
 	return

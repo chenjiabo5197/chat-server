@@ -82,5 +82,4 @@ func (np *NotifyProcessor) NotifyOnlineUser(data []byte, conn net.Conn) (err err
 		return
 	}
 	return
-
 }

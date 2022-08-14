@@ -66,7 +66,7 @@ func (up *UserProcess) NotifyOnlineUser(data []byte, conn net.Conn) (err error) 
 }
 
 // ServerProcessLogin 专门用于处理登陆的函数
-func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId string, err error) {
+func (up *UserProcess) ServerProcessLogin(mes *common.Message) (loginUser *common.User, err error, isSuccess bool) {
 	//将mes反序列化成LoginMes结构体
 	var loginMes common.LoginMes
 	err = json.Unmarshal([]byte(mes.Data), &loginMes)
@@ -76,14 +76,6 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId string, e
 	}
 	//定义一个LoginResMes结构体
 	var loginRespMes common.LoginRespMes
-
-	//判断输入的用户名和密码是否符合规定
-	// if loginMes.UserId == 100 && loginMes.UserPwd == "abc" {
-	// 	loginResMes.ResCode = 200
-	// }else{
-	// 	loginResMes.ResCode = 500
-	// 	loginResMes.Error = "输入的用户id或密码不正确"
-	// }
 
 	//拿UserDao对象的方法去redis验证
 	user, err := model.MyUserDao.Login(loginMes.UserId, loginMes.UserPwd)
@@ -107,14 +99,15 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId string, e
 		up.UserId = user.UserId
 		Usermgr.AddOnlineUsers(up)
 		loginRespMes.RespCode = 200
-		loginRespMes.UserName = user.UserName
-		loginRespMes.UsersId = user.UserId
+		loginRespMes.User = *user
 		//通知其他用户有新用户上线,2.0下线，转为用户查询再返回
 		//np := NotifyProcessor{}
 		//err = np.NotifyOthersOnlineUser(user, 0)
 		//for k := range Usermgr.OnlineUsers {
 		//	loginRespMes.UsersId = append(loginRespMes.UsersId, k)
 		//}
+		isSuccess = true
+		loginUser = user
 		logger.Info("%s登陆成功", utils.Struct2String(user))
 	}
 
@@ -144,7 +137,7 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId string, e
 	}
 	err = tf.WritePkg(data)
 	logger.Info("send to client login resp data=%s", data)
-	return loginMes.UserId, err
+	return
 }
 
 // ServerProcessRigister 专门用于处理注册的函数

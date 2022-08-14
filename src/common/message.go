@@ -7,18 +7,20 @@ package common
 type MesType string
 
 const (
-	LoginMesType            MesType = "LoginMes"
-	LoginRespMesType        MesType = "LoginRespMes"
-	RegisterMesType         MesType = "RegisterMes"
-	RegisterRespMesType     MesType = "RegisterRespMes"
-	NotifyUserStatusMesType MesType = "NotifyUserStatusMes"
-	SmsMesType              MesType = "SmsMes" // 广播通信
-	RecvSmsMesType          MesType = "RecvSmsMes"
-	QueryAllOnlineType      MesType = "QueryAllOnline"
-	AllOnlineRespType       MesType = "AllOnlineResp"
-	SmsToOneMesType         MesType = "SmsToOneMes"     // 1对1通信
-	RecvSmsToOneMesType     MesType = "RecvSmsToOneMes" // 收到的1对1通信
-	SmsRespMesType          MesType = "SmsRespMes"      // 发送1对1与群发消息的结果 ,失败或成功
+	LoginMesType               MesType = "LoginMes"
+	LoginRespMesType           MesType = "LoginRespMes"
+	RegisterMesType            MesType = "RegisterMes"
+	RegisterRespMesType        MesType = "RegisterRespMes"
+	NotifyUserStatusMesType    MesType = "NotifyUserStatusMes"
+	SmsMesType                 MesType = "SmsMes"            // 广播通信
+	RecvSmsMesType             MesType = "RecvSmsMes"        // 在线收到的广播通信
+	OfflineRecvSmsMesType      MesType = "OfflineRecvSmsMes" // 离线收到的广播通信
+	QueryAllOnlineType         MesType = "QueryAllOnline"
+	AllOnlineRespType          MesType = "AllOnlineResp"
+	SmsToOneMesType            MesType = "SmsToOneMes"            // 1对1通信
+	RecvSmsToOneMesType        MesType = "RecvSmsToOneMes"        // 在线收到的1对1通信
+	OfflineRecvSmsToOneMesType MesType = "OfflineRecvSmsToOneMes" // 离线收到的1对1通信
+	SmsRespMesType             MesType = "SmsRespMes"             // 发送1对1与群发消息的结果 ,失败或成功
 )
 
 //定义几个用户在线状态
@@ -44,8 +46,7 @@ type LoginMes struct {
 type LoginRespMes struct {
 	RespCode int    `json:"resp_code"`
 	Error    string `json:"error"`
-	UsersId  string
-	UserName string
+	User     User   `json:"user"`
 }
 
 // RegisterMes 客户端发送的注册消息
@@ -69,7 +70,7 @@ type OnlineUserInfo struct {
 	OnLineUserName string `json:"on_line_user_name"`
 }
 
-// RegisterRespMes 服务器端返回的注册的结果消息
+// StatusRespMes 服务器端返回操作的结果消息
 type StatusRespMes struct {
 	RespCode int    `json:"resp_code"`
 	Error    string `json:"error"`

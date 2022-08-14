@@ -70,7 +70,7 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error, statusStr string
 		if err != nil && statusResp.RespCode == 0 {
 			statusResp.RespCode = 500
 			statusResp.Error = err.Error()
-		} else {
+		} else if err == nil {
 			statusResp.RespCode = 200
 		}
 		statusStr = utils.Struct2String(statusResp)
@@ -126,7 +126,8 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error, statusStr string
 		}
 	}
 	if !isOnline { // 该用户不在线，将消息存入redis
-		err = model.MyUserDao.HSetDataByName(smsMes.UserName, mesResp)
+		mesResp.Type = common.OfflineRecvSmsToOneMesType
+		err = model.MyUserDao.HSetDataByName(smsMes.SmsMesTarget, mesResp)
 		if err != nil {
 			logger.Error("offline message hset to redis err, err=%v||mesResp=%s", err, utils.Struct2String(mesResp))
 			return
@@ -149,5 +150,31 @@ func (sp *SmsProcessor) SendMesToUser(data []byte, conn net.Conn) (err error) {
 		return
 	}
 	return
+}
 
+// SendOfflineMessage 向刚登录的用户发送离线消息，发送完删除该消息记录，防止重复发送
+func (sp *SmsProcessor) SendOfflineMessage(conn net.Conn, userName string) (err error) {
+	// 先拿到发给该用户的离线消息
+	data, err := model.MyUserDao.HGetDataByName(userName)
+	if err != nil || len(data) == 0 {
+		return
+	}
+
+	tf := &utils.Transfer{
+		Conn: conn,
+	}
+	for i := range data {
+		message, _ := json.Marshal(data[i])
+		err = tf.WritePkg(message)
+		if err != nil {
+			logger.Error("service transfer mes err, err=%s", err.Error())
+			return
+		}
+	}
+	logger.Info("success send offline message, data=%s", utils.Struct2String(data))
+	err = model.MyUserDao.HDelDataByName(userName)
+	if err != nil {
+		return
+	}
+	return
 }
