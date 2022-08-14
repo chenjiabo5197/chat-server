@@ -4,6 +4,7 @@ import (
 	"common"
 	"encoding/json"
 	logger "github.com/shengkehua/xlog4go"
+	"model"
 	"net"
 	"utils"
 )
@@ -12,8 +13,15 @@ type SmsProcessor struct {
 }
 
 // SendMesToAllUsers 向所有在线的用户发送消息
-func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
-
+func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error, statusStr string) {
+	statusResp := common.StatusRespMes{}
+	defer func() {
+		if err != nil && statusResp.RespCode == 0 {
+			statusResp.RespCode = 500
+			statusResp.Error = err.Error()
+		}
+		statusStr = utils.Struct2String(statusResp)
+	}()
 	//将受到的消息反序列化
 	var smsMes common.SmsMes
 	err = json.Unmarshal([]byte(mes.Data), &smsMes)
@@ -22,12 +30,6 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 		logger.Error("smsMes unmarshal err, err=%s", err.Error())
 		return
 	}
-	//fmt.Println("smsMes=",smsMes)
-	/*
-		必须序列化整个smsMes结构体，因为要发送一个消息实例，而不是一个string
-	*/
-	//data, err := json.Marshal(smsMes.Content)
-	//data, err := json.Marshal(smsMes)
 
 	//组装服务器转发聊天消息实例
 	smsRespMes := common.SmsRespMes{
@@ -41,7 +43,7 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 		return
 	}
 	mesResp := common.Message{
-		Type: common.SmsRespMesType,
+		Type: common.RecvSmsMesType,
 		Data: string(data),
 	}
 	data, err = json.Marshal(mesResp)
@@ -61,8 +63,16 @@ func (sp *SmsProcessor) SendMesToAllUsers(mes *common.Message) (err error) {
 	return
 }
 
-// SendMesToOne 向单个用户发送消息
-func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
+// SendMesToOne 向单个用户发送消息  返回状态，表示发送1对1消息的结果，失败或成功
+func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error, statusStr string) {
+	statusResp := common.StatusRespMes{}
+	defer func() {
+		if err != nil && statusResp.RespCode == 0 {
+			statusResp.RespCode = 500
+			statusResp.Error = err.Error()
+		}
+		statusStr = utils.Struct2String(statusResp)
+	}()
 	//将收到的消息反序列化
 	var smsMes common.SmsMes
 	err = json.Unmarshal([]byte(smsStr), &smsMes)
@@ -71,7 +81,6 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
 		logger.Error("smsMes unmarshal err, err=%s", err.Error())
 		return
 	}
-
 	//组装服务器转发聊天消息实例
 	smsRespMes := common.SmsRespMes{
 		User:        smsMes.User,
@@ -84,7 +93,7 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
 		return
 	}
 	mesResp := common.Message{
-		Type: common.SmsToOneRespMesType,
+		Type: common.RecvSmsToOneMesType,
 		Data: string(data),
 	}
 	data, err = json.Marshal(mesResp)
@@ -92,19 +101,39 @@ func (sp *SmsProcessor) SendMesToOne(smsStr string) (err error) {
 		logger.Error("mesResp marshal err, err=%s", err.Error())
 		return
 	}
-
-	//遍历所有在线的用户和其连接，找到要发送的对象
+	// 查找是否有这个用户
+	targetUserId := utils.GetMd5Value(smsMes.SmsMesTarget)
+	targetKey := model.GetRedisUserKey(targetUserId)
+	_, err = model.MyUserDao.GetDataByKey(targetKey)
+	if err != nil {  // 该用户不存在
+		logger.Error("SendMesToOne||cannot find %s in redis", smsMes.SmsMesTarget)
+		statusResp.Error = err.Error()
+		statusResp.RespCode = 404
+		return
+	}
+	// 在redis中找到该用户，用户存在，先判断是否在线，在线发送在线消息，不在线发送的消息储存在redis中，等上线后再发送过去
+	isOnline := false
 	for _, up := range Usermgr.OnlineUsers {
 		if smsMes.SmsMesTarget == up.UserName {
+			isOnline = true
 			err = sp.SendMesToUser(data, up.Conn)
+			logger.Info("success send to online one message, data=%s", string(data))
 			break
 		}
 	}
-	logger.Info("success send to one message, data=%s", utils.Struct2String(mesResp))
+	if !isOnline { // 该用户不在线，将消息存入redis
+		err = model.MyUserDao.HSetDataByName(smsMes.UserName, mesResp)
+		if err != nil {
+			logger.Error("offline message hset to redis err, err=%v||mesResp=%s", err, utils.Struct2String(mesResp))
+			return
+		}
+		logger.Info("offline message hset success store to redis, mesResp=%s", utils.Struct2String(mesResp))
+	}
+	logger.Info("success send to one message, data=%s||isOnline=%v", utils.Struct2String(mesResp), isOnline)
 	return
 }
 
-// SendMesToUser 向用户发送消息
+// SendMesToUser 向在线用户发送消息
 func (sp *SmsProcessor) SendMesToUser(data []byte, conn net.Conn) (err error) {
 	tf := &utils.Transfer{
 		Conn: conn,

@@ -21,45 +21,50 @@ func (p *Processor) ServerProcessMes(mes *common.Message) (err error) {
 	//fmt.Println("mes=",mes)
 
 	switch mes.Type {
-	case common.LoginMesType:
-		//处理登陆的函数
-		up := UserProcess{
-			Conn: p.Conn,
-		}
-		id, err := up.ServerProcessLogin(mes)
-		if err == nil {
-			//此时客户端已经登录成功
-			logger.Info("%s login success", id)
-		}
-		return err
-	case common.RegisterMesType:
-		//处理注册的函数
-		up := UserProcess{
-			Conn: p.Conn,
-		}
-		err = up.ServerProcessRigister(mes)
-		return
-	case common.SmsMesType:
-		//处理转发广播消息
-		sp := SmsProcessor{}
-		err = sp.SendMesToAllUsers(mes)
-		return
-	case common.QueryAllOnlineType:
-		//处理查询在线用户
-		qo := QueryOnline{
-			Conn: p.Conn,
-		}
-		qo.QueryAllOnlineUser(mes.Data)
-		return
-	case common.SmsToOneMesType:
-		//处理转发1对1聊天消息
-		sp := SmsProcessor{}
-		err = sp.SendMesToOne(mes.Data)
-		return
-	default:
-		//错误
-		logger.Error("unknown mes type，type=%v", mes.Type)
-		return
+		case common.LoginMesType:  //处理登陆的函数
+			up := UserProcess{
+				Conn: p.Conn,
+			}
+			id, err := up.ServerProcessLogin(mes)
+			if err == nil {
+				//此时客户端已经登录成功
+				logger.Info("%s login success", id)
+			}
+			return err
+		case common.RegisterMesType:   //处理注册的函数
+			up := UserProcess{
+				Conn: p.Conn,
+			}
+			err = up.ServerProcessRegister(mes)
+			return
+		case common.SmsMesType:  //处理转发广播消息
+			sp := SmsProcessor{}
+			_, statusRespStr := sp.SendMesToAllUsers(mes)
+			up := UserProcess{
+				Conn: p.Conn,
+			}
+			// 将发送消息的结果返回给客户端
+			err = up.SendRespStatus(statusRespStr, common.SmsRespMesType)
+			return
+		case common.QueryAllOnlineType:  //处理查询在线用户
+			qo := QueryOnline{
+				Conn: p.Conn,
+			}
+			qo.QueryAllOnlineUser(mes.Data)
+			return
+		case common.SmsToOneMesType:  //处理转发1对1聊天消息
+			sp := SmsProcessor{}
+			_, statusRespStr := sp.SendMesToOne(mes.Data)
+			up := UserProcess{
+				Conn: p.Conn,
+			}
+			// 将发送消息的结果返回给客户端
+			err = up.SendRespStatus(statusRespStr, common.SmsRespMesType)
+			return
+		default:
+			//错误
+			logger.Error("unknown mes type，type=%v", mes.Type)
+			return
 	}
 }
 

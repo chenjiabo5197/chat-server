@@ -13,11 +13,12 @@ const (
 	RegisterRespMesType     MesType = "RegisterRespMes"
 	NotifyUserStatusMesType MesType = "NotifyUserStatusMes"
 	SmsMesType              MesType = "SmsMes" // 广播通信
-	SmsRespMesType          MesType = "SmsRespMes"
+	RecvSmsMesType          MesType = "RecvSmsMes"
 	QueryAllOnlineType      MesType = "QueryAllOnline"
 	AllOnlineRespType       MesType = "AllOnlineResp"
 	SmsToOneMesType         MesType = "SmsToOneMes" // 1对1通信
-	SmsToOneRespMesType     MesType = "SmsToOneRespMes"
+	RecvSmsToOneMesType		MesType = "RecvSmsToOneMes" // 收到的1对1通信
+	SmsRespMesType     		MesType = "SmsRespMes"  // 发送1对1与群发消息的结果 ,失败或成功
 )
 
 //定义几个用户在线状态
@@ -69,7 +70,7 @@ type OnlineUserInfo struct {
 }
 
 // RegisterRespMes 服务器端返回的注册的结果消息
-type RegisterRespMes struct {
+type StatusRespMes struct {
 	RespCode int    `json:"resp_code"`
 	Error    string `json:"error"`
 }

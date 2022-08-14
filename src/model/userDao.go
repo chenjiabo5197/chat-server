@@ -3,6 +3,7 @@ package model
 import (
 	"common"
 	"encoding/json"
+	"fmt"
 	"github.com/garyburd/redigo/redis"
 	logger "github.com/shengkehua/xlog4go"
 	"utils"
@@ -13,6 +14,12 @@ import (
 */
 var (
 	MyUserDao *UserDao
+)
+
+const (
+	USER_REDIS_PREFIX_KEY = "chat_service_user_"
+	USRR_ONLINE_KEY = "chat_service_online_user"
+	USER_OFFLINE_MESSAGE_KEY = "chat_service_offline_message"
 )
 
 /*
@@ -33,13 +40,18 @@ func NewUserDao(pool *redis.Pool) (userDao *UserDao) {
 	return
 }
 
-/*
-	定义一个方法，根据传入的redis连接和userid，返回user实例对象或错误
-*/
-func (up *UserDao) getUserById(conn redis.Conn, userId string) (user *common.User, err error) {
+func GetRedisUserKey(userId string) string {
+	return fmt.Sprintf(USER_REDIS_PREFIX_KEY+userId)
+}
 
+//根据传入的key，返回user实例对象或错误
+func (up *UserDao) GetDataByKey(key string) (user *common.User, err error) {
+	//从redis连接池中获取一个连接
+	redisClient := up.pool.Get()
+	defer redisClient.Close()
 	//通过传入的id去redis查询
-	res, err := redis.String(conn.Do("HGet", "users", userId))
+	//res, err := redis.String(redisClient.Do("HGet", "users", userId))
+	res, err := redis.String(redisClient.Do("Get", key))
 
 	if err != nil {
 		if err == redis.ErrNil { //在redis中没有找到相应对象
@@ -49,9 +61,59 @@ func (up *UserDao) getUserById(conn redis.Conn, userId string) (user *common.Use
 	}
 	//将找到的对象反序列化
 	err = json.Unmarshal([]byte(res), &user)
-
 	if err != nil {
 		logger.Error("redis data unmarshal err, err=%s", err.Error())
+		return
+	}
+	return
+}
+
+//根据传入的key和data，往redis string类型中塞入数据
+func (up *UserDao) SetDataByKey(key string, data string) (err error) {
+	//从redis连接池中获取一个连接
+	redisClient := up.pool.Get()
+	defer redisClient.Close()
+
+	_, err = redisClient.Do("Set", key, data)
+	if err != nil {
+		logger.Error("save rigister mes err, err=%s", err.Error())
+		return
+	}
+	return
+}
+
+//根据传入的username，储存发给该用户的离线消息到redis中 hash类型
+func (up *UserDao) HSetDataByName(userName string, mesResp common.Message) (err error) {
+	//从redis连接池中获取一个连接
+	redisClient := up.pool.Get()
+	defer redisClient.Close()
+	//先将redis中目标的离线消息拿到手，然后再增加
+	data, err := up.HGetDataByName(userName)
+	if err != nil {
+		return
+	}
+	data = append(data, mesResp)
+	_, err = redis.String(redisClient.Do("HSet", USER_OFFLINE_MESSAGE_KEY, userName, data))
+	if err != nil {
+		logger.Error("hset offline message to redis err, err=%v", err)
+		return
+	}
+	return
+}
+
+//根据传入的username，返回该用户目前的离线消息
+func (up *UserDao) HGetDataByName(userName string) (data []common.Message, err error) {
+	//从redis连接池中获取一个连接
+	redisClient := up.pool.Get()
+	defer redisClient.Close()
+	//先将redis中目标的离线消息拿到手，然后再增加
+	content, err := redis.String(redisClient.Do("HGet", USER_OFFLINE_MESSAGE_KEY, userName))
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal([]byte(content), &data)
+	if err != nil {
+		logger.Error("offline message unmarshal err, err=%v", err)
 		return
 	}
 	return
@@ -64,15 +126,13 @@ func (up *UserDao) getUserById(conn redis.Conn, userId string) (user *common.Use
 func (up *UserDao) Login(userId string, userPwd string) (user *common.User, err error) {
 
 	//从redis连接池中获取一个连接
-	conn := up.pool.Get()
+	redisClient := up.pool.Get()
+	defer redisClient.Close()
 
-	defer conn.Close()
-
-	user, err = up.getUserById(conn, userId)
+	user, err = up.GetDataByKey(USER_REDIS_PREFIX_KEY+userId)
 	if err != nil { //证明数据库中不存在这个id的用户
 		return
 	}
-
 	if user.UserPwd != userPwd { //用户密码错误F
 		err = ERROR_USER_PWD
 		return
@@ -81,39 +141,22 @@ func (up *UserDao) Login(userId string, userPwd string) (user *common.User, err 
 	return
 }
 
-/*
-	根据传入的User实例对象返回注册的结果
-*/
+//根据传入的User实例对象返回注册的结果
 func (up *UserDao) RegisterUser(user common.User) (err error) {
-
-	//从redis连接池中获取一个连接
-	conn := up.pool.Get()
-
-	defer conn.Close()
-
-	//user := message.User{}
-	//err = json.Unmarshal([]byte(userString), &user)
-	//if err != nil {
-	//	fmt.Println("userString反序列化失败")
-	//	return
-	//}
-	logger.Debug("user=%s", utils.Struct2String(user))
-
-	_, err = up.getUserById(conn, user.UserId)
-
+	logger.Debug("register||user=%s", utils.Struct2String(user))
+	_, err = up.GetDataByKey(USER_REDIS_PREFIX_KEY+user.UserId)
 	if err == nil { //证明在数据库中存在这个id的用户
 		err = ERROR_USER_EXISTS
 		return
 	}
-
 	//走到这里证明数据库中不存在此id的用户，将user转为string
 	data, err := json.Marshal(user)
-	_, err = conn.Do("HSet", "users", user.UserId, string(data))
+	err = up.SetDataByKey(USER_REDIS_PREFIX_KEY+user.UserId, string(data))
 	if err != nil {
-		logger.Error("save rigister mes err, err=%s", err.Error())
+		logger.Error("save register mes err, err=%s", err.Error())
 		return
 	}
-
 	//走到这里证明用户名正确，返回err=nil
+	logger.Info("register||save user message success")
 	return
 }

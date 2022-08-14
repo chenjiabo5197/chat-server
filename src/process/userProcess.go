@@ -150,60 +150,66 @@ func (up *UserProcess) ServerProcessLogin(mes *common.Message) (userId string, e
 }
 
 // ServerProcessRigister 专门用于处理注册的函数
-func (up *UserProcess) ServerProcessRigister(mes *common.Message) (err error) {
+func (up *UserProcess) ServerProcessRegister(mes *common.Message) (err error) {
 	//将mes反序列化成LoginMes结构体
-	var rigisterMes common.RegisterMes
-	err = json.Unmarshal([]byte(mes.Data), &rigisterMes)
+	var registerMes common.RegisterMes
+	err = json.Unmarshal([]byte(mes.Data), &registerMes)
 
 	if err != nil {
-		logger.Error("RigisterMes unmarshal err, err=%s", err.Error())
+		logger.Error("RegisterMes unmarshal err, err=%s", err.Error())
 		return
 	}
-	logger.Info("RigisterMes=%s", utils.Struct2String(rigisterMes))
-	//定义一个RigisterResMes结构体
-	var rigisterRespMes common.RegisterRespMes
+	logger.Info("RegisterMes=%s", utils.Struct2String(registerMes))
+	//定义一个状态返回的结构体，表示执行的状态
+	var registerRespMes common.StatusRespMes
 
 	//拿UserDao对象的方法去redis验证
-	err = model.MyUserDao.RegisterUser(rigisterMes.User)
+	err = model.MyUserDao.RegisterUser(registerMes.User)
 
 	if err != nil {
 		if err == model.ERROR_USER_EXISTS {
-			rigisterRespMes.RespCode = 500
-			rigisterRespMes.Error = err.Error()
+			registerRespMes.RespCode = 500
+			registerRespMes.Error = err.Error()
 		} else {
-			rigisterRespMes.RespCode = 505
-			rigisterRespMes.Error = "服务器内部错误"
+			registerRespMes.RespCode = 505
+			registerRespMes.Error = "服务器内部错误"
 		}
 	} else {
-		rigisterRespMes.RespCode = 200
-		logger.Info("rigister success")
+		registerRespMes.RespCode = 200
+		logger.Info("register success")
 	}
-
 	//将rigisterResMes反序列化
-	data, err := json.Marshal(rigisterRespMes)
+	data, err := json.Marshal(registerRespMes)
 	if err != nil {
-		logger.Error("rigisterRespMes marshal err, err=%s", err.Error())
+		logger.Error("registerRespMes marshal err, err=%s", err.Error())
 		return
 	}
+	err = up.SendRespStatus(string(data), common.RegisterRespMesType)
+	return
+}
 
+// 用于将服务器对客户端的返回发送
+func (up *UserProcess) SendRespStatus(sendData string, mesType common.MesType) (err error) {
 	//定义一个Message结构体，用于发送给客户端
 	var resMes common.Message
-	resMes.Type = common.RegisterRespMesType
-	resMes.Data = string(data)
+	resMes.Type = mesType
+	resMes.Data = sendData
 
 	//将Message结构体序列化
-	data, err = json.Marshal(resMes)
+	data, err := json.Marshal(resMes)
 	if err != nil {
 		logger.Info("resMes marshal err, err=%v", err.Error())
 		return
 	}
-	logger.Info("send to client rigister resp data=%s", data)
-
 	//将Message序列化的结果发送给客户端
 	//mvc模式，所以必须先创建一个Transfer实例，然后读取
 	tf := utils.Transfer{
 		Conn: up.Conn,
 	}
 	err = tf.WritePkg(data)
+	if err != nil {
+		logger.Error("fail send to client status resp data=%s||err=%s", data, err.Error())
+	}
+	logger.Info("success send to client status resp data=%s", data)
 	return
 }
